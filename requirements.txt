@@ -1,0 +1,2 @@
+# aws-infrastructure also specifies its dependencies
+-e git+https://github.com/fogies/aws-infrastructure.git#egg=aws-infrastructure&subdirectory=aws_infrastructure
