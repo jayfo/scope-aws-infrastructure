@@ -21,7 +21,7 @@ module "minikube_helm_instance" {
 
   aws_availability_zone = "us-east-1a"
   ami_architecture = "amd64"
-  aws_instance_type = "t3.medium"
+  aws_instance_type = "t3.large"
 
   eip = true
   eip_id = var.eip_id
