@@ -19,6 +19,14 @@ releases:
     needs:
       - 'ingress-crd'
 
+    # An example of enabling DEBUG logging for the ingress instance of Traefik
+    #
+    # values:
+    #   - traefik:
+    #       logs:
+    #         general:
+    #           level: 'DEBUG'
+
 # Prefer explicit management of CRDs via releases
 helmDefaults:
   args:
