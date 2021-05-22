@@ -1,0 +1,47 @@
+
+---
+
+# https://doc.traefik.io/traefik/middlewares/redirectscheme/
+
+apiVersion: 'traefik.containo.us/v1alpha1'
+kind: 'Middleware'
+
+metadata:
+  name: 'ingress-scope-web-redirect-https'
+  labels:
+    app: 'scope-app'
+
+spec:
+  redirectScheme:
+    scheme: 'https'
+    permanent: true
+    port: '443'
+
+---
+
+# https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/
+# https://doc.traefik.io/traefik/routing/routers/
+
+apiVersion: 'traefik.containo.us/v1alpha1'
+kind: 'IngressRoute'
+
+metadata:
+  name: 'ingress-scope-redirect-http-web'
+  labels:
+    app: 'scope-web'
+
+spec:
+  entryPoints:
+    - 'web'
+  routes:
+    - kind: 'Rule'
+      match: 'HostRegexp(`{any:.+}`)'
+      priority: 100
+      middlewares:
+        - name: 'ingress-scope-web-redirect-https'
+      # Provide a service so the route is valid, but all traffic is caught by the middleware.
+      # This simply prevents Traefik from generating errors based on the route.
+      services:
+        - kind: 'Service'
+          name: 'scope-web'
+          port: 3000

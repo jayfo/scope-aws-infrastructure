@@ -1,20 +1,16 @@
-# https://doc.traefik.io/traefik/middlewares/stripprefix/
+# https://doc.traefik.io/traefik/middlewares/redirectscheme/
 
 apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'Middleware'
 
 metadata:
-  name: 'ingress-scope-app-stripprefix-api'
+  name: 'ingress-scope-app-replacepath-forbidden'
   labels:
     app: 'scope-app'
 
 spec:
-  entrypoints:
-    - 'websecure'
-  stripPrefix:
-    prefixes:
-      - '/api'
-    forceSlash: false
+  replacePath:
+    path: '/forbidden'
 
 ---
 
@@ -25,22 +21,20 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'IngressRoute'
 
 metadata:
-  name: 'ingress-scope-app'
+  name: 'ingress-scope-redirect-http-app'
   labels:
     app: 'scope-app'
 
 spec:
   entryPoints:
-    - 'websecure'
+    - 'web'
   routes:
     - kind: 'Rule'
       match: 'HostRegexp(`{any:.+}`) && PathPrefix(`/api/`)'
       priority: 10000
       middlewares:
-        - name: 'ingress-scope-app-stripprefix-api'
+        - name: 'ingress-scope-app-replacepath-forbidden'
       services:
         - kind: 'Service'
           name: 'scope-app'
           port: 4000
-  tls:
-    secretName: 'tls-uwscope-org'

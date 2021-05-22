@@ -10,12 +10,12 @@ metadata:
     app: 'scope-web'
 
 spec:
-  entrypoints:
+  entryPoints:
     - 'websecure'
   routes:
     - kind: 'Rule'
       match: 'HostRegexp(`{any:.+}`)'
-      priority: 1000
+      priority: 100
       services:
         - kind: 'Service'
           name: 'scope-web'
