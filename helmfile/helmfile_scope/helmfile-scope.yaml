@@ -1,0 +1,52 @@
+repositories:
+  # aws-infrastructure helm repository
+  #
+  # When developing charts that will later be merged, it can be helpful to instead point at a branch:
+  # - url: 'https://raw.githubusercontent.com/<account>/aws-infrastructure/<branch>/helm_repo/'
+  - name: 'aws-infrastructure'
+    url: 'https://raw.githubusercontent.com/fogies/aws-infrastructure/main/helm_repo/'
+
+releases:
+  # ingress-crd contains the CRDs required by ingress
+  - name: 'ingress-crd'
+    chart: 'aws-infrastructure/ingress-crd'
+    version: '0.1.0'
+
+  # ingress is then the actual ingress, including Traefik and cert-manager
+  - name: 'ingress'
+    chart: 'aws-infrastructure/ingress'
+    version: '0.3.0'
+    needs:
+      - 'ingress-crd'
+
+    # An example of enabling DEBUG logging for the ingress instance of Traefik
+    # values:
+    #   - traefik:
+    #       logs:
+    #         general:
+    #           level: 'DEBUG'
+
+  # scope-app
+  # Installed from a local helmfile, managed in helmfile-config.yaml
+  - name: 'scope-app'
+    chart: './helm/scope-app.tgz'
+
+  # scope-web
+  # Installed from a local helmfile, managed in helmfile-config.yaml
+  - name: 'scope-web'
+    chart: './helm/scope-web.tgz'
+
+  # scope-ingress
+  # Installed from a local helmfile, managed in helmfile-config.yaml
+  - name: 'scope-ingress'
+    chart: './helm/scope-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+
+helmDefaults:
+  # Prefer explicit management of CRDs via releases
+  args:
+    - '--skip-crds'
+
+# Prefer explicit errors
+missingFileHandler: 'Error'
