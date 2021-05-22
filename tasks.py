@@ -2,6 +2,7 @@ from invoke import Collection
 
 import aws_infrastructure.task_templates.config
 import aws_infrastructure.task_templates.helm
+import terraform_dns.tasks
 import terraform_elastic_ip.tasks
 import terraform_instance.tasks
 
@@ -27,6 +28,11 @@ ns.configure({
         'helm_repo_staging_dir': 'helm_repo_staging',
     }
 })
+
+# Tasks for our DNS
+ns_terraform_dns = terraform_dns.tasks.ns
+ns.add_collection(ns_terraform_dns)
+ns.configure(ns_terraform_dns.configuration())
 
 # Tasks for our elastic ip
 ns_terraform_elastic_ip = terraform_elastic_ip.tasks.ns
