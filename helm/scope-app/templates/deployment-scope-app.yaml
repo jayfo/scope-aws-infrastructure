@@ -6,7 +6,8 @@ metadata:
     app: 'scope-app'
 
 spec:
-  replicas: 3
+  # TODO: Current 1 replica because of internal state, increase when stateless
+  replicas: 1
   selector:
     matchLabels:
       app: 'scope-app'
