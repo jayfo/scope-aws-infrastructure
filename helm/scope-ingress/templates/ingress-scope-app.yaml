@@ -1,0 +1,46 @@
+# https://doc.traefik.io/traefik/middlewares/stripprefix/
+
+apiVersion: 'traefik.containo.us/v1alpha1'
+kind: 'Middleware'
+
+metadata:
+  name: 'ingress-scope-app-stripprefix-api'
+  labels:
+    app: 'scope-app'
+
+spec:
+  entrypoints:
+    - 'websecure'
+  stripPrefix:
+    prefixes:
+      - '/api'
+    forceSlash: false
+
+---
+
+# https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/
+# https://doc.traefik.io/traefik/routing/routers/
+
+apiVersion: 'traefik.containo.us/v1alpha1'
+kind: 'IngressRoute'
+
+metadata:
+  name: 'ingress-scope-app'
+  labels:
+    app: 'scope-app'
+
+spec:
+  entrypoints:
+    - 'websecure'
+  routes:
+    - kind: 'Rule'
+      match: 'PathPrefix(`/api/`)'
+      priority: 10000
+      middlewares:
+        - name: 'ingress-scope-app-stripprefix-api'
+      services:
+        - kind: 'Service'
+          name: 'scope-app'
+          port: 4000
+  tls:
+    secretName: 'tls-uwscope-org'
