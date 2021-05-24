@@ -1,0 +1,27 @@
+apiVersion: 'apps/v1'
+kind: 'Deployment'
+metadata:
+  name: 'deployment-scope-web'
+  labels:
+    app: 'scope-web'
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: 'scope-web'
+  template:
+    metadata:
+      labels:
+        app: 'scope-web'
+    spec:
+      containers:
+        - name: 'scope-web'
+          image: 'scope-web'
+          imagePullPolicy: 'Never'
+          ports:
+            - containerPort: 3000
+
+#          resources:
+#            limits:
+#              cpu: '500m'
