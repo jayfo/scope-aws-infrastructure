@@ -1,37 +1,33 @@
-import aws_infrastructure.task_templates.terraform
-from collections import namedtuple
+from aws_infrastructure.tasks import compose_collection
+import aws_infrastructure.tasks.library.eip
+import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 
-# Key for configuration
-CONFIG_KEY = 'terraform_elastic_ip'
+CONFIG_KEY = 'eip'
+BIN_TERRAFORM = './bin/terraform.exe'
+DIR_TERRAFORM = './terraform_eip'
 
-# Configured a collection
-ns = Collection('elastic-ip')
+ns = Collection('eip')
 
-ns.configure({
-    CONFIG_KEY: {
-        'working_dir': 'terraform_elastic_ip',
-        'bin_dir': '../bin'
-    }
-})
-
-# Define and import tasks
-terraform_tasks = aws_infrastructure.task_templates.terraform.create_tasks(
+ns_eip = aws_infrastructure.tasks.library.eip.create_tasks(
     config_key=CONFIG_KEY,
-    output_tuple_factory=namedtuple('elastic_ip', ['id', 'public_ip'])
+    bin_terraform=BIN_TERRAFORM,
+    dir_terraform=DIR_TERRAFORM,
 )
 
-# Add tasks to our collection
-# - Exclude 'init' and 'output' for legibility, could be enabled for debugging.
-for task_current in terraform_tasks.tasks.values():
-    if task_current.name in ['init', 'output']:
-        continue
+compose_collection(
+    ns,
+    ns_eip,
+    sub=False,
+    exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
+        dir_terraform=DIR_TERRAFORM,
+        exclude=[
+            'init',
+            'output',
+        ],
+    )
+)
 
-    ns.add_task(task_current)
-
-# Provide only init and output to the context manager.
-# It therefore can only access the elastic ip, cannot create or destroy the elastic ip.
-elastic_ip = aws_infrastructure.task_templates.terraform.create_context_manager(
-    init=terraform_tasks.tasks['init'],
-    output=terraform_tasks.tasks['output'],
+eip_read_only = aws_infrastructure.tasks.library.eip.create_eip_read_only(
+    ns_eip=ns_eip
 )
