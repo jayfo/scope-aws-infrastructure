@@ -1,64 +1,30 @@
 /*
- * Explicit configuration of providers.
+ * Tag created resources.
  */
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.9.0"
-    }
-  }
-}
-
 locals {
-  domain_name = "uwscope.org"
-}
-
-/*
- * Zone for managing our DNS.
- */
-resource "aws_route53_zone" "dns_zone" {
-  name = local.domain_name
-}
-
-/*
- * Whenever the zone is created, or its name servers are otherwise modified,
- * update the domain to point and the name servers for the zone.
- *
- * https://github.com/hashicorp/terraform-provider-aws/issues/88
- */
-resource "null_resource" "aws_domain_com_nameservers" {
-  triggers = {
-    nameservers = join(", ",sort(aws_route53_zone.dns_zone.name_servers))
-  }
-
-  provisioner "local-exec" {
-    command = "aws route53domains update-domain-nameservers --domain-name ${local.domain_name} --nameservers ${join(" ",formatlist(" Name=%s",sort(aws_route53_zone.dns_zone.name_servers)))}"
+  tags = {
+    "scope-aws-infrastructure/terraform_dns": ""
   }
 }
 
 /*
- * Record for "uwscope.org"
+ * Zone with DNS records.
  */
-resource "aws_route53_record" "root_dns" {
-  zone_id = aws_route53_zone.dns_zone.zone_id
+module "hosted_zone" {
+  source = "github.com/fogies/aws-infrastructure//terraform_common/hosted_zone"
 
   name = "uwscope.org"
-  type = "A"
-  ttl = "15"
 
-  records = [var.eip_public_ip]
-}
+  address_records = [
+    {
+      name = "uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "www.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+  ]
 
-/*
- * Record for "www.uwscope.org"
- */
-resource "aws_route53_record" "www_dns" {
-  zone_id = aws_route53_zone.dns_zone.zone_id
-
-  name = "www.uwscope.org"
-  type = "A"
-  ttl = "15"
-
-  records = [var.eip_public_ip]
+  tags = local.tags
 }

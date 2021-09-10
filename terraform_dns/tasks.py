@@ -1,40 +1,40 @@
-import aws_infrastructure.task_templates.terraform
+from aws_infrastructure.tasks import compose_collection
+import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 
-import terraform_elastic_ip.tasks
+import terraform_eip.tasks
 
-# Key for configuration
-CONFIG_KEY = 'terraform_dns'
+CONFIG_KEY = 'dns'
+BIN_TERRAFORM = './bin/terraform.exe'
+DIR_TERRAFORM = './terraform_dns'
 
-# Configured a collection
 ns = Collection('dns')
-
-ns.configure({
-    CONFIG_KEY: {
-        'working_dir': 'terraform_dns',
-        'bin_dir': '../bin'
-    }
-})
 
 
 # Define variables to provide to Terraform
 def variables(*, context):
-    with terraform_elastic_ip.tasks.elastic_ip(context=context) as elastic_ip:
+    with terraform_eip.tasks.eip_read_only(context=context) as eip:
         return {
-            'eip_public_ip': elastic_ip.output.public_ip
+            'eip_public_ip': eip.output.public_ip
         }
 
 
-# Define and import tasks
-terraform_tasks = aws_infrastructure.task_templates.terraform.create_tasks(
+ns_dns = aws_infrastructure.tasks.library.terraform.create_tasks(
     config_key=CONFIG_KEY,
+    bin_terraform=BIN_TERRAFORM,
+    dir_terraform=DIR_TERRAFORM,
     variables=variables
 )
 
-# Add tasks to our collection
-# - Exclude 'init' and 'output' for legibility, could be enabled for debugging.
-for task_current in terraform_tasks.tasks.values():
-    if task_current.name in ['init', 'output']:
-        continue
-
-    ns.add_task(task_current)
+compose_collection(
+    ns,
+    ns_dns,
+    sub=False,
+    exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
+        dir_terraform=DIR_TERRAFORM,
+        exclude=[
+            'init',
+            'output',
+        ],
+    )
+)
