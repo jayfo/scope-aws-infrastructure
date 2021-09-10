@@ -1,12 +1,9 @@
 /*
- * Explicit configuration of providers.
+ * Tag created resources.
  */
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.9.0"
-    }
+locals {
+  tags = {
+    "scope-aws-infrastructure/terraform_instance": ""
   }
 }
 
@@ -16,18 +13,16 @@ terraform {
 module "minikube_helm_instance" {
   source = "github.com/fogies/aws-infrastructure//terraform_common/minikube_helm"
 
-  instance_name = "instance"
-  instance_dir = "instance"
-
-  aws_availability_zone = "us-east-1a"
-  aws_instance_type = "t3.large"
+  name = "instance"
 
   ami_configuration = "amd64-large"
+  aws_instance_type = "t3.large"
 
-  eip = true
+  create_vpc = true
+  availability_zone = "us-east-1a"
+
   eip_id = var.eip_id
   eip_public_ip = var.eip_public_ip
 
-  tags = {
-  }
+  tags = local.tags
 }

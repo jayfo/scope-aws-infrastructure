@@ -1,59 +1,45 @@
-import aws_infrastructure.task_templates.minikube_helm
+from aws_infrastructure.tasks import compose_collection
+import aws_infrastructure.tasks.library.minikube_helm
+import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 
-import terraform_elastic_ip.tasks
+import terraform_eip.tasks
 
-# Key for configuration
 CONFIG_KEY = 'terraform_instance'
-
-# Configure a collection
-ns = Collection('instance')
-
-ns.configure({
-    CONFIG_KEY: {
-        'working_dir': 'terraform_instance',
-        'bin_dir': '../bin',
-        'helm_charts_dir': '../helm_repo',
-        'instance_dirs': [
-            'instance',
-        ],
-    }
-})
+BIN_TERRAFORM = './bin/terraform.exe'
+DIR_TERRAFORM = './terraform_instance'
+DIR_HELM_REPO = './helm_repo'
+INSTANCES = ['instance']
 
 
 # Define variables to provide to Terraform
 def variables(*, context):
-    with terraform_elastic_ip.tasks.elastic_ip(context=context) as elastic_ip:
+    with terraform_eip.tasks.eip_read_only(context=context) as eip_read_only:
         return {
-            'eip_id': elastic_ip.output.id,
-            'eip_public_ip': elastic_ip.output.public_ip
+            'eip_id': eip_read_only.output.id,
+            'eip_public_ip': eip_read_only.output.public_ip
         }
 
 
-# Define and import tasks
-minikube_helm_tasks = aws_infrastructure.task_templates.minikube_helm.create_tasks(
+ns = Collection('instance')
+
+ns_minikube_helm = aws_infrastructure.tasks.library.minikube_helm.create_tasks(
     config_key=CONFIG_KEY,
-    working_dir=ns.configuration()[CONFIG_KEY]['working_dir'],
-    instance_dirs=ns.configuration()[CONFIG_KEY]['instance_dirs'],
+    bin_terraform=BIN_TERRAFORM,
+    dir_terraform=DIR_TERRAFORM,
+    dir_helm_repo=DIR_HELM_REPO,
+    instances=INSTANCES,
     variables=variables
 )
 
-# Add tasks to our collection
-# - Exclude 'init' and 'output' for legibility, could be enabled for debugging.
-# - Include collections that contain tasks for created instances.
-for task_current in minikube_helm_tasks.tasks.values():
-    if task_current.name in ['init', 'output']:
-        continue
-
-    ns.add_task(task_current)
-
-# Add child collections to our collection
-# - Promote tasks from the 'instance' collection to our collection
-for collection_current in minikube_helm_tasks.collections.values():
-    if collection_current.name == 'instance':
-        for task_current in collection_current.tasks.values():
-            ns.add_task(task_current)
-
-        continue
-
-    ns.add_collection(collection_current)
+compose_collection(
+    ns,
+    ns_minikube_helm,
+    sub=False,
+    exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
+        dir_terraform=DIR_TERRAFORM,
+        exclude=[
+            'init',
+        ],
+    )
+)

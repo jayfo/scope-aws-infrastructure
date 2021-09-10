@@ -5,6 +5,7 @@ from invoke import Collection
 import tasks.helm
 import terraform_eip.tasks
 import terraform_dns.tasks
+import terraform_instance.tasks
 
 # Build our task collection
 ns = Collection()
@@ -24,3 +25,6 @@ compose_collection(ns, terraform_dns.tasks.ns, name='dns')
 
 # Compose from terraform_eip
 compose_collection(ns, terraform_eip.tasks.ns, name='eip')
+
+# Compose from terraform_instance
+compose_collection(ns, terraform_instance.tasks.ns, name='instance')
