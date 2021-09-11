@@ -15,8 +15,8 @@ module "minikube_helm_instance" {
 
   name = "instance"
 
-  ami_configuration = "amd64-large"
-  aws_instance_type = "t3.large"
+  ami_configuration = "amd64-medium"
+  aws_instance_type = "t3.medium"
 
   create_vpc = true
   availability_zone = "us-east-1a"
