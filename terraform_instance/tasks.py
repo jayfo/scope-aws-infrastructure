@@ -5,7 +5,7 @@ from invoke import Collection
 
 import terraform_eip.tasks
 
-CONFIG_KEY = 'terraform_instance'
+CONFIG_KEY = 'instance'
 BIN_TERRAFORM = './bin/terraform.exe'
 DIR_TERRAFORM = './terraform_instance'
 DIR_HELM_REPO = './helm_repo'
