@@ -12,7 +12,7 @@ ns = Collection('dns')
 
 
 # Define variables to provide to Terraform
-def variables(*, context):
+def terraform_variables(*, context):
     with terraform_eip.tasks.eip_read_only(context=context) as eip:
         return {
             'eip_public_ip': eip.output.public_ip
@@ -23,7 +23,7 @@ ns_dns = aws_infrastructure.tasks.library.terraform.create_tasks(
     config_key=CONFIG_KEY,
     bin_terraform=BIN_TERRAFORM,
     dir_terraform=DIR_TERRAFORM,
-    variables=variables
+    terraform_variables=terraform_variables,
 )
 
 compose_collection(

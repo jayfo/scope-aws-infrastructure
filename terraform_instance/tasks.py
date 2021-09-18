@@ -13,7 +13,7 @@ INSTANCES = ['instance']
 
 
 # Define variables to provide to Terraform
-def variables(*, context):
+def terraform_variables(*, context):
     with terraform_eip.tasks.eip_read_only(context=context) as eip_read_only:
         return {
             'eip_id': eip_read_only.output.id,
@@ -29,7 +29,7 @@ ns_minikube_helm = aws_infrastructure.tasks.library.minikube_helm.create_tasks(
     dir_terraform=DIR_TERRAFORM,
     dir_helm_repo=DIR_HELM_REPO,
     instances=INSTANCES,
-    variables=variables
+    terraform_variables=terraform_variables,
 )
 
 compose_collection(
