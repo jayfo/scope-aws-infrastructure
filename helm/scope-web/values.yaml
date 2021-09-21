@@ -1,0 +1,10 @@
+# Required values.
+#
+# registry:
+#   url:
+#   username:
+#   password:
+
+image:
+  name: 'scope_aws_infrastructure/scope_web'
+  tag: 'latest'

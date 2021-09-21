@@ -1,28 +1,30 @@
 apiVersion: 'apps/v1'
 kind: 'Deployment'
 metadata:
-  name: 'deployment-scope-app'
+  name: 'deployment-{{ .Release.Name }}'
   labels:
-    app: 'scope-app'
+    app: '{{ .Release.Name }}'
 
 spec:
   # TODO: Current 1 replica because of internal state, increase when stateless
   replicas: 1
   selector:
     matchLabels:
-      app: 'scope-app'
+      app: '{{ .Release.Name }}'
   template:
     metadata:
       labels:
-        app: 'scope-app'
+        app: '{{ .Release.Name }}'
     spec:
       containers:
         - name: 'scope-app'
-          image: 'scope-app'
-          imagePullPolicy: 'Never'
+          image: '{{ printf "%s/%s:%s" .Values.registry.url .Values.image.name .Values.image.tag }}'
+          imagePullPolicy: 'Always'
           ports:
             - containerPort: 4000
+          resources:
+            limits:
+              cpu: '100m'
 
-#          resources:
-#            limits:
-#              cpu: '500m'
+      imagePullSecrets:
+        - name: 'secret-image-pull-{{ .Release.Name }}'
