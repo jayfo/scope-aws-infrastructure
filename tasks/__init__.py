@@ -3,6 +3,7 @@ import aws_infrastructure.tasks.library.config
 from invoke import Collection
 
 import tasks.helm
+import terraform_codebuild.tasks
 import terraform_dns.tasks
 import terraform_ecr.tasks
 import terraform_eip.tasks
@@ -20,6 +21,9 @@ compose_collection(
 
 # Compose from helm.py
 compose_collection(ns, tasks.helm.ns, name='helm')
+
+# Compose from terraform_codebuild
+compose_collection(ns, terraform_codebuild.tasks.ns, name='codebuild')
 
 # Compose from terraform_dns
 compose_collection(ns, terraform_dns.tasks.ns, name='dns')
