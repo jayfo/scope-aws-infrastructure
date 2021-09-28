@@ -27,19 +27,23 @@ releases:
     #           level: 'DEBUG'
 
   # scope-app
-  # Installed from a local helmfile, managed in helmfile-config.yaml
+  # Installed from a local chart, managed in helmfile-config.yaml
   - name: 'scope-app'
-    chart: './helm/scope-app.tgz'
+    chart: './charts/scope-app.tgz'
+    values:
+      - './values/ecr.values.yaml'
 
   # scope-web
-  # Installed from a local helmfile, managed in helmfile-config.yaml
+  # Installed from a local chart, managed in helmfile-config.yaml
   - name: 'scope-web'
-    chart: './helm/scope-web.tgz'
+    chart: './charts/scope-web.tgz'
+    values:
+      - './values/ecr.values.yaml'
 
   # scope-ingress
-  # Installed from a local helmfile, managed in helmfile-config.yaml
+  # Installed from a local chart, managed in helmfile-config.yaml
   - name: 'scope-ingress'
-    chart: './helm/scope-ingress.tgz'
+    chart: './charts/scope-ingress.tgz'
     needs:
       - 'ingress-crd'
 
@@ -50,3 +54,4 @@ helmDefaults:
 
 # Prefer explicit errors
 missingFileHandler: 'Error'
+

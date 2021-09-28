@@ -10,8 +10,8 @@ locals {
 /*
  * Instance of Minikube Helm.
  */
-module "minikube_helm_instance" {
-  source = "github.com/fogies/aws-infrastructure//terraform_common/minikube_helm"
+module "minikube_instance" {
+  source = "github.com/fogies/aws-infrastructure//terraform_common/minikube_instance"
 
   name = "instance"
 

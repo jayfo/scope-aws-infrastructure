@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: 'scope-app'
-          image: '{{ printf "%s/%s:%s" .Values.registry.url .Values.image.name .Values.image.tag }}'
+          image: '{{ printf "%s/%s:%s" .Values.registryUrl .Values.imageName .Values.imageTag }}'
           imagePullPolicy: 'Always'
           ports:
             - containerPort: 4000

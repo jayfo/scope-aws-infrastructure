@@ -1,15 +1,19 @@
 from aws_infrastructure.tasks import compose_collection
-import aws_infrastructure.tasks.library.minikube_helm
+import aws_infrastructure.tasks.library.instance_helmfile
+import aws_infrastructure.tasks.library.minikube
 import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
+from pathlib import Path
 
+import terraform_ecr.tasks
 import terraform_eip.tasks
 
 CONFIG_KEY = 'instance'
 BIN_TERRAFORM = './bin/terraform.exe'
 DIR_TERRAFORM = './terraform_instance'
 DIR_HELM_REPO = './helm_repo'
-INSTANCES = ['instance']
+DIR_STAGING_LOCAL_HELMFILE = './.staging/helmfile'
+INSTANCE_NAME = 'instance'
 
 
 # Define variables to provide to Terraform
@@ -23,23 +27,54 @@ def terraform_variables(*, context):
 
 ns = Collection('instance')
 
-ns_minikube_helm = aws_infrastructure.tasks.library.minikube_helm.create_tasks(
+ns_minikube = aws_infrastructure.tasks.library.minikube.create_tasks(
     config_key=CONFIG_KEY,
     bin_terraform=BIN_TERRAFORM,
     dir_terraform=DIR_TERRAFORM,
     dir_helm_repo=DIR_HELM_REPO,
-    instances=INSTANCES,
+    dir_staging_local_helmfile=DIR_STAGING_LOCAL_HELMFILE,
+    instance_names=[INSTANCE_NAME],
     terraform_variables=terraform_variables,
 )
 
 compose_collection(
     ns,
-    ns_minikube_helm,
+    ns_minikube,
     sub=False,
     exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
         dir_terraform=DIR_TERRAFORM,
         exclude=[
             'init',
+            'helm-install',
+            'helmfile-apply',
+            'ssh-port-forward',
         ],
     )
 )
+
+
+# Helmfile deployment requires information on accessing the ECR
+def ecr_values_factory(*, context):
+    with terraform_ecr.tasks.ecr_read_only(context=context) as ecr_read_only:
+        return {
+            'registryUrl': ecr_read_only.output.registry_url,
+            'registryUser': ecr_read_only.output.registry_user,
+            'registryPassword': ecr_read_only.output.registry_password,
+        }
+
+
+path_ssh_config = Path(DIR_TERRAFORM, INSTANCE_NAME, 'ssh_config.yaml')
+
+if path_ssh_config.exists():
+    task_helmfile_scope = aws_infrastructure.tasks.library.instance_helmfile.task_helmfile_apply(
+        config_key=CONFIG_KEY,
+        path_ssh_config=path_ssh_config,
+        dir_staging_local=DIR_STAGING_LOCAL_HELMFILE,
+        path_helmfile='./helmfile/helmfile_scope/helmfile.yaml',
+        path_helmfile_config='./helmfile/helmfile_scope/helmfile-config.yaml',
+        values_variables={
+            'ecr': ecr_values_factory
+        },
+    )
+
+    ns.add_task(task_helmfile_scope, name='helmfile-scope')
