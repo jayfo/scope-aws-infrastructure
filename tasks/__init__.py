@@ -8,6 +8,7 @@ import terraform_dns.tasks
 import terraform_ecr.tasks
 import terraform_eip.tasks
 import terraform_instance.tasks
+import terraform_vpc.tasks
 
 # Build our task collection
 ns = Collection()
@@ -36,3 +37,6 @@ compose_collection(ns, terraform_eip.tasks.ns, name='eip')
 
 # Compose from terraform_instance
 compose_collection(ns, terraform_instance.tasks.ns, name='instance')
+
+# Compose from terraform_vpc
+compose_collection(ns, terraform_vpc.tasks.ns, name='vpc')

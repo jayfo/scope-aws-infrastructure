@@ -1,0 +1,33 @@
+from aws_infrastructure.tasks import compose_collection
+import aws_infrastructure.tasks.library.vpc
+import aws_infrastructure.tasks.library.terraform
+from invoke import Collection
+
+CONFIG_KEY = 'vpc'
+BIN_TERRAFORM = './bin/terraform.exe'
+DIR_TERRAFORM = './terraform_vpc'
+
+ns = Collection('vpc')
+
+ns_vpc = aws_infrastructure.tasks.library.vpc.create_tasks(
+    config_key=CONFIG_KEY,
+    bin_terraform=BIN_TERRAFORM,
+    dir_terraform=DIR_TERRAFORM,
+)
+
+compose_collection(
+    ns,
+    ns_vpc,
+    sub=False,
+    exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
+        dir_terraform=DIR_TERRAFORM,
+        exclude=[
+            'init',
+            'output',
+        ],
+    )
+)
+
+vpc_read_only = aws_infrastructure.tasks.library.vpc.create_vpc_read_only(
+    ns_vpc=ns_vpc
+)
