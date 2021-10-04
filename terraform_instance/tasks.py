@@ -16,6 +16,11 @@ DIR_STAGING_LOCAL_HELMFILE = './.staging/helmfile'
 INSTANCE_NAME = 'instance'
 
 
+#
+# Default tasks for maintaining the instance.
+#
+
+
 # Define variables to provide to Terraform
 def terraform_variables(*, context):
     with terraform_eip.tasks.eip_read_only(context=context) as eip_read_only:
@@ -51,6 +56,11 @@ compose_collection(
         ],
     )
 )
+
+
+#
+# A task for deploying our primary Helmfile to the instance.
+#
 
 
 # Helmfile deployment requires information on accessing the ECR
