@@ -18,8 +18,9 @@ module "minikube_instance" {
   ami_configuration = "amd64-medium"
   aws_instance_type = "t3.medium"
 
-  create_vpc = true
-  availability_zone = "us-east-1a"
+  vpc_id = var.vpc_id
+  vpc_default_security_group_id = var.vpc_default_security_group_id
+  subnet_id = var.subnet_id
 
   eip_id = var.eip_id
   eip_public_ip = var.eip_public_ip

@@ -7,6 +7,7 @@ from pathlib import Path
 
 import terraform_ecr.tasks
 import terraform_eip.tasks
+import terraform_vpc.tasks
 
 CONFIG_KEY = 'instance'
 BIN_TERRAFORM = './bin/terraform.exe'
@@ -24,10 +25,21 @@ INSTANCE_NAME = 'instance'
 # Define variables to provide to Terraform
 def terraform_variables(*, context):
     with terraform_eip.tasks.eip_read_only(context=context) as eip_read_only:
-        return {
-            'eip_id': eip_read_only.output.id,
-            'eip_public_ip': eip_read_only.output.public_ip
-        }
+        eip_id = eip_read_only.output.id
+        eip_public_ip = eip_read_only.output.public_ip
+
+    with terraform_vpc.tasks.vpc_read_only(context=context) as vpc_read_only:
+        vpc_id = vpc_read_only.output.vpc_id
+        vpc_default_security_group_id = vpc_read_only.output.default_security_group_id
+        subnet_id = vpc_read_only.output.subnet_id
+
+    return {
+        'eip_id': eip_id,
+        'eip_public_ip': eip_public_ip,
+        'vpc_id': vpc_id,
+        'vpc_default_security_group_id': vpc_default_security_group_id,
+        'subnet_id': subnet_id,
+    }
 
 
 ns = Collection('instance')
