@@ -10,12 +10,15 @@ import terraform_eip.tasks
 import terraform_vpc.tasks
 
 CONFIG_KEY = 'instance'
-BIN_TERRAFORM = './bin/terraform.exe'
-DIR_TERRAFORM = './terraform_instance'
-DIR_HELM_REPO = './helm_repo'
-DIR_STAGING_LOCAL_HELMFILE = './.staging/helmfile'
+TERRAFORM_BIN = './bin/terraform.exe'
+TERRAFORM_DIR = './terraform_instance'
+HELM_REPO_DIR = './helm_repo'
+STAGING_LOCAL_HELMFILE_DIR = './.staging/helmfile'
 INSTANCE_NAME = 'instance'
+TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.tfvars')
 
+
+ns = Collection('instance')
 
 #
 # Default tasks for maintaining the instance.
@@ -23,7 +26,7 @@ INSTANCE_NAME = 'instance'
 
 
 # Define variables to provide to Terraform
-def terraform_variables(*, context):
+def terraform_variables_factory(*, context):
     with terraform_eip.tasks.eip_read_only(context=context) as eip_read_only:
         eip_id = eip_read_only.output.id
         eip_public_ip = eip_read_only.output.public_ip
@@ -42,16 +45,15 @@ def terraform_variables(*, context):
     }
 
 
-ns = Collection('instance')
-
 ns_minikube = aws_infrastructure.tasks.library.minikube.create_tasks(
     config_key=CONFIG_KEY,
-    bin_terraform=BIN_TERRAFORM,
-    dir_terraform=DIR_TERRAFORM,
-    dir_helm_repo=DIR_HELM_REPO,
-    dir_staging_local_helmfile=DIR_STAGING_LOCAL_HELMFILE,
+    terraform_bin=TERRAFORM_BIN,
+    terraform_dir=TERRAFORM_DIR,
+    helm_repo_dir=HELM_REPO_DIR,
+    staging_local_helmfile_dir=STAGING_LOCAL_HELMFILE_DIR,
     instance_names=[INSTANCE_NAME],
-    terraform_variables=terraform_variables,
+    terraform_variables_factory=terraform_variables_factory,
+    terraform_variables_path=TERRAFORM_VARIABLES_PATH,
 )
 
 compose_collection(
@@ -59,7 +61,7 @@ compose_collection(
     ns_minikube,
     sub=False,
     exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
-        dir_terraform=DIR_TERRAFORM,
+        terraform_dir=TERRAFORM_DIR,
         exclude=[
             'init',
             'helm-install',
@@ -85,13 +87,13 @@ def ecr_values_factory(*, context):
         }
 
 
-path_ssh_config = Path(DIR_TERRAFORM, INSTANCE_NAME, 'ssh_config.yaml')
+ssh_config_path = Path(TERRAFORM_DIR, INSTANCE_NAME, 'ssh_config.yaml')
 
-if path_ssh_config.exists():
+if ssh_config_path.exists():
     task_helmfile_scope = aws_infrastructure.tasks.library.instance_helmfile.task_helmfile_apply(
         config_key=CONFIG_KEY,
-        path_ssh_config=path_ssh_config,
-        dir_staging_local=DIR_STAGING_LOCAL_HELMFILE,
+        ssh_config_path=ssh_config_path,
+        staging_local_dir=STAGING_LOCAL_HELMFILE_DIR,
         path_helmfile='./helmfile/helmfile_scope/helmfile.yaml',
         path_helmfile_config='./helmfile/helmfile_scope/helmfile-config.yaml',
         values_variables={

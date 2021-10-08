@@ -4,15 +4,15 @@ import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 
 CONFIG_KEY = 'vpc'
-BIN_TERRAFORM = './bin/terraform.exe'
-DIR_TERRAFORM = './terraform_vpc'
+TERRAFORM_BIN = './bin/terraform.exe'
+TERRAFORM_DIR = './terraform_vpc'
 
 ns = Collection('vpc')
 
 ns_vpc = aws_infrastructure.tasks.library.vpc.create_tasks(
     config_key=CONFIG_KEY,
-    bin_terraform=BIN_TERRAFORM,
-    dir_terraform=DIR_TERRAFORM,
+    terraform_bin=TERRAFORM_BIN,
+    terraform_dir=TERRAFORM_DIR,
 )
 
 compose_collection(
@@ -20,7 +20,7 @@ compose_collection(
     ns_vpc,
     sub=False,
     exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
-        dir_terraform=DIR_TERRAFORM,
+        terraform_dir=TERRAFORM_DIR,
         exclude=[
             'init',
             'output',

@@ -13,15 +13,22 @@ output "default_security_group_id" {
 }
 
 /*
- * ID of the default subnet.
+ * ID of a default subnet.
  */
 output "subnet_id" {
   value = module.vpc.subnet_id
 }
 
 /*
- * ID of all the subnets.
+ * List of IDs of all subnets.
  */
 output "subnet_ids" {
   value = module.vpc.subnet_ids
+}
+
+/*
+ * Map from availability zones to subnet IDs.
+ */
+output "availability_zone_subnet_ids" {
+  value = module.vpc.availability_zone_subnet_ids
 }
