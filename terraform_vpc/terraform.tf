@@ -13,7 +13,7 @@ locals {
  * us-east-1e does not support t3.medium, so we exclude it here.
  */
 module "vpc" {
-  source = "github.com/fogies/aws-infrastructure//terraform_common/vpc_simple"
+  source = "github.com/fogies/aws-infrastructure//terraform_common/vpc"
 
   availability_zones = [
     "us-east-1a",

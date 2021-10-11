@@ -5,6 +5,7 @@ import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 from pathlib import Path
 
+import terraform_documentdb.tasks
 import terraform_ecr.tasks
 import terraform_eip.tasks
 import terraform_vpc.tasks
@@ -14,6 +15,8 @@ TERRAFORM_BIN = './bin/terraform.exe'
 TERRAFORM_DIR = './terraform_instance'
 HELM_REPO_DIR = './helm_repo'
 STAGING_LOCAL_HELMFILE_DIR = './.staging/helmfile'
+STAGING_REMOTE_HELM_DIR = './.staging/helm'
+STAGING_REMOTE_HELMFILE_DIR = './.staging/helmfile'
 INSTANCE_NAME = 'instance'
 TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.tfvars')
 
@@ -51,6 +54,8 @@ ns_minikube = aws_infrastructure.tasks.library.minikube.create_tasks(
     terraform_dir=TERRAFORM_DIR,
     helm_repo_dir=HELM_REPO_DIR,
     staging_local_helmfile_dir=STAGING_LOCAL_HELMFILE_DIR,
+    staging_remote_helm_dir=STAGING_REMOTE_HELM_DIR,
+    staging_remote_helmfile_dir=STAGING_REMOTE_HELMFILE_DIR,
     instance_names=[INSTANCE_NAME],
     terraform_variables_factory=terraform_variables_factory,
     terraform_variables_path=TERRAFORM_VARIABLES_PATH,
@@ -76,9 +81,19 @@ compose_collection(
 # A task for deploying our primary Helmfile to the instance.
 #
 
+# Helmfile deployment requires information on accessing the DocumentDB
+def documentdb_helmfile_values_factory(*, context):
+    with terraform_documentdb.tasks.documentdb_read_only(context=context) as documentdb_read_only:
+        return {
+            'documentdbAdminUser': documentdb_read_only.output.admin_user,
+            'documentdbAdminPassword': documentdb_read_only.output.admin_password,
+            'documentdbEndpoint': documentdb_read_only.output.endpoint,
+            'documentdbHosts': documentdb_read_only.output.hosts,
+        }
+
 
 # Helmfile deployment requires information on accessing the ECR
-def ecr_values_factory(*, context):
+def ecr_helmfile_values_factory(*, context):
     with terraform_ecr.tasks.ecr_read_only(context=context) as ecr_read_only:
         return {
             'registryUrl': ecr_read_only.output.registry_url,
@@ -94,10 +109,12 @@ if ssh_config_path.exists():
         config_key=CONFIG_KEY,
         ssh_config_path=ssh_config_path,
         staging_local_dir=STAGING_LOCAL_HELMFILE_DIR,
+        staging_remote_dir=STAGING_REMOTE_HELMFILE_DIR,
         path_helmfile='./helmfile/helmfile_scope/helmfile.yaml',
         path_helmfile_config='./helmfile/helmfile_scope/helmfile-config.yaml',
-        values_variables={
-            'ecr': ecr_values_factory
+        helmfile_values_factories={
+            'documentdb': documentdb_helmfile_values_factory,
+            'ecr': ecr_helmfile_values_factory,
         },
     )
 
