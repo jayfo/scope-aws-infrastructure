@@ -8,7 +8,7 @@ import terraform_eip.tasks
 CONFIG_KEY = 'dns'
 TERRAFORM_BIN = './bin/terraform.exe'
 TERRAFORM_DIR = './terraform_dns'
-TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.tfvars')
+TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
 
 ns = Collection('dns')
 
@@ -33,11 +33,14 @@ compose_collection(
     ns,
     ns_dns,
     sub=False,
-    exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
+    exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
         exclude=[
             'init',
             'output',
         ],
+        exclude_without_state=[
+            'destroy',
+        ]
     )
 )

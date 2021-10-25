@@ -18,7 +18,7 @@ STAGING_LOCAL_HELMFILE_DIR = './.staging/helmfile'
 STAGING_REMOTE_HELM_DIR = './.staging/helm'
 STAGING_REMOTE_HELMFILE_DIR = './.staging/helmfile'
 INSTANCE_NAME = 'instance'
-TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.tfvars')
+TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
 
 
 ns = Collection('instance')
@@ -65,7 +65,7 @@ compose_collection(
     ns,
     ns_minikube,
     sub=False,
-    exclude=aws_infrastructure.tasks.library.terraform.exclude_destroy_without_state(
+    exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
         exclude=[
             'init',
@@ -73,6 +73,9 @@ compose_collection(
             'helmfile-apply',
             'ssh-port-forward',
         ],
+        exclude_without_state=[
+            'destroy',
+        ]
     )
 )
 
@@ -110,8 +113,8 @@ if ssh_config_path.exists():
         ssh_config_path=ssh_config_path,
         staging_local_dir=STAGING_LOCAL_HELMFILE_DIR,
         staging_remote_dir=STAGING_REMOTE_HELMFILE_DIR,
-        path_helmfile='./helmfile/helmfile_scope/helmfile.yaml',
-        path_helmfile_config='./helmfile/helmfile_scope/helmfile-config.yaml',
+        helmfile_path='./helmfile/helmfile_scope/helmfile.yaml',
+        helmfile_config_path='./helmfile/helmfile_scope/helmfile-config.yaml',
         helmfile_values_factories={
             'documentdb': documentdb_helmfile_values_factory,
             'ecr': ecr_helmfile_values_factory,
