@@ -1,13 +1,13 @@
 apiVersion: 'v1'
 kind: 'Service'
 metadata:
-  name: 'scope-app'
+  name: '{{ .Release.Name }}'
   labels:
-    app: 'scope-app'
+    app: '{{ .Release.Name }}'
 
 spec:
   selector:
-    app: 'scope-app'
+    app: '{{ .Release.Name }}'
   ports:
     - port: 4000
       protocol: 'TCP'

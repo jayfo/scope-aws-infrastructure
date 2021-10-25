@@ -1,0 +1,8 @@
+# Required values.
+#
+# registryUrl:
+# registryUser:
+# registryPassword:
+
+imageName: 'scope_aws_infrastructure/scope_web'
+imageTag: 'latest'

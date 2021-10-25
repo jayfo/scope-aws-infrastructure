@@ -37,24 +37,24 @@ RUN apk --update add git less openssh && \
     rm /var/cache/apk/*
 
 # Clone web repository
-RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY web
+RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY scope-web
 
 #
 # Stage build and serve
 #
 # Build and serve the project. Assumptions about the project:
 # - Dependencies installed via a `yarn install`.
-# - Build via a `yarn build`.
-# - Then serve via a `yarn serve`.
+# - Build via a `yarn web_prod_build`.
+# - Then serve via a `yarn web_prod_serve`.
 # - Will listen on port 3000.
 #
 FROM node:15-alpine AS stage_build_serve
 
-WORKDIR /web
-COPY --from=stage_git /web .
+WORKDIR /scope-web
+COPY --from=stage_git /scope-web .
 
 RUN yarn install
-RUN yarn build
+RUN yarn web_prod_build
 
 EXPOSE 3000
-CMD ["yarn", "serve"]
+CMD ["yarn", "web_prod_serve"]

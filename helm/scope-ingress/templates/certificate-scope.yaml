@@ -11,5 +11,7 @@ spec:
     - 'uwscope.org'
     - 'www.uwscope.org'
   issuerRef:
+    # TODO: Make it more difficult to accidentally do this with production,
+    #       require helmfile choice of production or staging
     name: 'letsencrypt'
     kind: 'ClusterIssuer'

@@ -1,27 +1,29 @@
 apiVersion: 'apps/v1'
 kind: 'Deployment'
 metadata:
-  name: 'deployment-scope-web'
+  name: 'deployment-{{ .Release.Name }}'
   labels:
-    app: 'scope-web'
+    app: '{{ .Release.Name }}'
 
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: 'scope-web'
+      app: '{{ .Release.Name }}'
   template:
     metadata:
       labels:
-        app: 'scope-web'
+        app: '{{ .Release.Name }}'
     spec:
       containers:
         - name: 'scope-web'
-          image: 'scope-web'
-          imagePullPolicy: 'Never'
+          image: '{{ printf "%s/%s:%s" .Values.registryUrl .Values.imageName .Values.imageTag }}'
+          imagePullPolicy: 'Always'
           ports:
             - containerPort: 3000
+          resources:
+            limits:
+              cpu: '100m'
 
-#          resources:
-#            limits:
-#              cpu: '500m'
+      imagePullSecrets:
+        - name: 'secret-image-pull-{{ .Release.Name }}'

@@ -1,6 +1,3 @@
-# Python Environment
-/.venv/
-
 # IDE Configuration
 /.idea/
 
@@ -9,6 +6,6 @@
 
 # Terraform Local State
 .terraform
-*.tfstate
-*.tfstate.backup
-*.tfstate.lock.info
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfstate.lock.info

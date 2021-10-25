@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+aws-infrastructure = {subdirectory = "aws_infrastructure", editable = true, git = "https://github.com/fogies/aws-infrastructure.git"}
+
+[dev-packages]
+pipenv = "*"
+
+[requires]
+python_version = "3.9"

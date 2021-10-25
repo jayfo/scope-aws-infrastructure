@@ -1,59 +1,124 @@
-import aws_infrastructure.task_templates.minikube_helm
+from aws_infrastructure.tasks import compose_collection
+import aws_infrastructure.tasks.library.instance_helmfile
+import aws_infrastructure.tasks.library.minikube
+import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
+from pathlib import Path
 
-import terraform_elastic_ip.tasks
+import terraform_documentdb.tasks
+import terraform_ecr.tasks
+import terraform_eip.tasks
+import terraform_vpc.tasks
 
-# Key for configuration
-CONFIG_KEY = 'terraform_instance'
+CONFIG_KEY = 'instance'
+TERRAFORM_BIN = './bin/terraform.exe'
+TERRAFORM_DIR = './terraform_instance'
+HELM_REPO_DIR = './helm_repo'
+STAGING_LOCAL_HELMFILE_DIR = './.staging/helmfile'
+STAGING_REMOTE_HELM_DIR = './.staging/helm'
+STAGING_REMOTE_HELMFILE_DIR = './.staging/helmfile'
+INSTANCE_NAME = 'instance'
+TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
 
-# Configure a collection
+
 ns = Collection('instance')
 
-ns.configure({
-    CONFIG_KEY: {
-        'working_dir': 'terraform_instance',
-        'bin_dir': '../bin',
-        'helm_charts_dir': '../helm_repo',
-        'instance_dirs': [
-            'instance',
-        ],
-    }
-})
+#
+# Default tasks for maintaining the instance.
+#
 
 
 # Define variables to provide to Terraform
-def variables(*, context):
-    with terraform_elastic_ip.tasks.elastic_ip(context=context) as elastic_ip:
+def terraform_variables_factory(*, context):
+    with terraform_eip.tasks.eip_read_only(context=context) as eip_read_only:
+        eip_id = eip_read_only.output.id
+        eip_public_ip = eip_read_only.output.public_ip
+
+    with terraform_vpc.tasks.vpc_read_only(context=context) as vpc_read_only:
+        vpc_id = vpc_read_only.output.vpc_id
+        vpc_default_security_group_id = vpc_read_only.output.default_security_group_id
+        subnet_id = vpc_read_only.output.subnet_id
+
+    return {
+        'eip_id': eip_id,
+        'eip_public_ip': eip_public_ip,
+        'vpc_id': vpc_id,
+        'vpc_default_security_group_id': vpc_default_security_group_id,
+        'subnet_id': subnet_id,
+    }
+
+
+ns_minikube = aws_infrastructure.tasks.library.minikube.create_tasks(
+    config_key=CONFIG_KEY,
+    terraform_bin=TERRAFORM_BIN,
+    terraform_dir=TERRAFORM_DIR,
+    helm_repo_dir=HELM_REPO_DIR,
+    staging_local_helmfile_dir=STAGING_LOCAL_HELMFILE_DIR,
+    staging_remote_helm_dir=STAGING_REMOTE_HELM_DIR,
+    staging_remote_helmfile_dir=STAGING_REMOTE_HELMFILE_DIR,
+    instance_names=[INSTANCE_NAME],
+    terraform_variables_factory=terraform_variables_factory,
+    terraform_variables_path=TERRAFORM_VARIABLES_PATH,
+)
+
+compose_collection(
+    ns,
+    ns_minikube,
+    sub=False,
+    exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
+        terraform_dir=TERRAFORM_DIR,
+        exclude=[
+            'init',
+            'helm-install',
+            'helmfile-apply',
+            'ssh-port-forward',
+        ],
+        exclude_without_state=[
+            'destroy',
+        ]
+    )
+)
+
+
+#
+# A task for deploying our primary Helmfile to the instance.
+#
+
+# Helmfile deployment requires information on accessing the DocumentDB
+def documentdb_helmfile_values_factory(*, context):
+    with terraform_documentdb.tasks.documentdb_read_only(context=context) as documentdb_read_only:
         return {
-            'eip_id': elastic_ip.output.id,
-            'eip_public_ip': elastic_ip.output.public_ip
+            'documentdbAdminUser': documentdb_read_only.output.admin_user,
+            'documentdbAdminPassword': documentdb_read_only.output.admin_password,
+            'documentdbEndpoint': documentdb_read_only.output.endpoint,
+            'documentdbHosts': documentdb_read_only.output.hosts,
         }
 
 
-# Define and import tasks
-minikube_helm_tasks = aws_infrastructure.task_templates.minikube_helm.create_tasks(
-    config_key=CONFIG_KEY,
-    working_dir=ns.configuration()[CONFIG_KEY]['working_dir'],
-    instance_dirs=ns.configuration()[CONFIG_KEY]['instance_dirs'],
-    variables=variables
-)
+# Helmfile deployment requires information on accessing the ECR
+def ecr_helmfile_values_factory(*, context):
+    with terraform_ecr.tasks.ecr_read_only(context=context) as ecr_read_only:
+        return {
+            'registryUrl': ecr_read_only.output.registry_url,
+            'registryUser': ecr_read_only.output.registry_user,
+            'registryPassword': ecr_read_only.output.registry_password,
+        }
 
-# Add tasks to our collection
-# - Exclude 'init' and 'output' for legibility, could be enabled for debugging.
-# - Include collections that contain tasks for created instances.
-for task_current in minikube_helm_tasks.tasks.values():
-    if task_current.name in ['init', 'output']:
-        continue
 
-    ns.add_task(task_current)
+ssh_config_path = Path(TERRAFORM_DIR, INSTANCE_NAME, 'ssh_config.yaml')
 
-# Add child collections to our collection
-# - Promote tasks from the 'instance' collection to our collection
-for collection_current in minikube_helm_tasks.collections.values():
-    if collection_current.name == 'instance':
-        for task_current in collection_current.tasks.values():
-            ns.add_task(task_current)
+if ssh_config_path.exists():
+    task_helmfile_scope = aws_infrastructure.tasks.library.instance_helmfile.task_helmfile_apply(
+        config_key=CONFIG_KEY,
+        ssh_config_path=ssh_config_path,
+        staging_local_dir=STAGING_LOCAL_HELMFILE_DIR,
+        staging_remote_dir=STAGING_REMOTE_HELMFILE_DIR,
+        helmfile_path='./helmfile/helmfile_scope/helmfile.yaml',
+        helmfile_config_path='./helmfile/helmfile_scope/helmfile-config.yaml',
+        helmfile_values_factories={
+            'documentdb': documentdb_helmfile_values_factory,
+            'ecr': ecr_helmfile_values_factory,
+        },
+    )
 
-        continue
-
-    ns.add_collection(collection_current)
+    ns.add_task(task_helmfile_scope, name='helmfile-scope')

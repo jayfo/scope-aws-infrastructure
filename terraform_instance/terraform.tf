@@ -1,33 +1,29 @@
 /*
- * Explicit configuration of providers.
+ * Tag created resources.
  */
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.9.0"
-    }
+locals {
+  tags = {
+    "scope-aws-infrastructure/terraform_instance": ""
   }
 }
 
 /*
  * Instance of Minikube Helm.
  */
-module "minikube_helm_instance" {
-  source = "github.com/fogies/aws-infrastructure//terraform_common/minikube_helm"
+module "minikube_instance" {
+  source = "github.com/fogies/aws-infrastructure//terraform_common/minikube_instance"
 
-  instance_name = "instance"
-  instance_dir = "instance"
+  name = "instance"
 
-  aws_availability_zone = "us-east-1a"
-  aws_instance_type = "t3.large"
+  ami_configuration = "amd64-medium"
+  aws_instance_type = "t3.medium"
 
-  ami_configuration = "amd64-large"
+  vpc_id = var.vpc_id
+  vpc_default_security_group_id = var.vpc_default_security_group_id
+  subnet_id = var.subnet_id
 
-  eip = true
   eip_id = var.eip_id
   eip_public_ip = var.eip_public_ip
 
-  tags = {
-  }
+  tags = local.tags
 }

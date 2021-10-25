@@ -37,27 +37,29 @@ RUN apk --update add git less openssh && \
     rm /var/cache/apk/*
 
 # Clone web repository
-RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY app
+RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY scope-web
 
 #
 # Stage build and serve
 #
 # Build and serve the project. Assumptions about the project:
-# - Dependencies installed via a `pip install -r requirements.txt`.
+# - Dependencies installed via pipenv.
 # - Server is within directory 'server'.
 # - Then serve via a `flask run`.
 # - Will listen on port 4000.
 #
 # Do not use alpine for python:
 # https://pythonspeed.com/articles/alpine-docker-python/
-FROM python:3.9-slim AS stage_build_serve
+#
+# Do not use slim variants of Python, as they lack git.
+# Causes failure when pipenv dependencies include git dependencies.
+FROM python:3.9 AS stage_build_serve
 
-WORKDIR /app
-COPY --from=stage_git /app .
+WORKDIR /scope-web
+COPY --from=stage_git /scope-web .
 
-RUN pip install -r requirements.txt
-
-WORKDIR /app/server
+RUN pip install pipenv
+RUN pipenv sync --system
 
 EXPOSE 4000
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["invoke", "flask.prod"]
