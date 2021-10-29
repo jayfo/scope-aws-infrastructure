@@ -1,12 +1,17 @@
+#
+# Redirect all traffic from the web entrypoint that attempts to access /api/.
+#
+# Redirect to an error so this will fail fast.
+# Priority of this rule is greater than ingress-redirect-http-web, this rule will happen first.
+#
+
 # https://doc.traefik.io/traefik/middlewares/redirectscheme/
 
 apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'Middleware'
 
 metadata:
-  name: 'ingress-scope-app-replacepath-forbidden'
-  labels:
-    app: 'scope-app'
+  name: '{{ .Release.Name }}-redirect-http-app-middleware'
 
 spec:
   replacePath:
@@ -21,9 +26,7 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'IngressRoute'
 
 metadata:
-  name: 'ingress-scope-redirect-http-app'
-  labels:
-    app: 'scope-app'
+  name: '{{ .Release.Name }}-redirect-http-app-route'
 
 spec:
   entryPoints:
@@ -33,10 +36,13 @@ spec:
       match: 'HostRegexp(`{any:.+}`) && PathPrefix(`/api/`)'
       priority: 10000
       middlewares:
-        - name: 'ingress-scope-app-replacepath-forbidden'
+        - name: '{{ .Release.Name }}-redirect-http-app-middleware'
       # Provide a service so the route is valid, but all traffic is caught by the middleware.
       # This simply prevents Traefik from generating errors based on the route.
+      #
+      # TODO: This should not depend on a non-existent external service
+      # But without the service the rule does not happen. So maybe create a small local service.
       services:
         - kind: 'Service'
-          name: 'scope-app'
+          name: 'scope-web'
           port: 4000

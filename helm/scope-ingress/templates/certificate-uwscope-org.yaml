@@ -1,0 +1,20 @@
+#
+# An SSL certificate that supports a set of DNS names.
+#
+
+apiVersion: 'cert-manager.io/v1'
+kind: 'Certificate'
+
+metadata:
+  name: '{{ .Release.Name }}-cert'
+
+spec:
+  commonName: {{ (first .Values.dnsNames) | squote }}
+  secretName: {{ .Values.tlsSecret | squote }}
+  dnsNames:
+    {{- range .Values.dnsNames }}
+    - {{ . | squote }}
+    {{- end }}
+  issuerRef:
+    name: {{ .Values.issuer | squote }}
+    kind: 'ClusterIssuer'

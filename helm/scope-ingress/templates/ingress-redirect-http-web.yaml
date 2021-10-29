@@ -1,12 +1,16 @@
+#
+# Redirect all traffic from the web entrypoint to instead use SSL.
+#
+# Priority of this rule is less than ingress-redirect-http-app, that rule will happen first.
+#
+
 # https://doc.traefik.io/traefik/middlewares/redirectscheme/
 
 apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'Middleware'
 
 metadata:
-  name: 'ingress-scope-web-redirect-https'
-  labels:
-    app: 'scope-app'
+  name: '{{ .Release.Name }}-redirect-http-web-middleware'
 
 spec:
   redirectScheme:
@@ -23,9 +27,7 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'IngressRoute'
 
 metadata:
-  name: 'ingress-scope-redirect-http-web'
-  labels:
-    app: 'scope-web'
+  name: '{{ .Release.Name }}-redirect-http-web-route'
 
 spec:
   entryPoints:
@@ -35,9 +37,11 @@ spec:
       match: 'HostRegexp(`{any:.+}`)'
       priority: 100
       middlewares:
-        - name: 'ingress-scope-web-redirect-https'
+        - name: '{{ .Release.Name }}-redirect-http-web-middleware'
       # Provide a service so the route is valid, but all traffic is caught by the middleware.
       # This simply prevents Traefik from generating errors based on the route.
+      #
+      # TODO: This should not depend on an external service
       services:
         - kind: 'Service'
           name: 'scope-web'
