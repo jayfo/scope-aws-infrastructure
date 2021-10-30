@@ -44,6 +44,6 @@ spec:
       services:
         - kind: 'Service'
           name: {{ .Values.serviceApp | squote }}
-          port: 4000
+          port: 8000
   tls:
     secretName: {{ .Values.tlsSecret | squote }}

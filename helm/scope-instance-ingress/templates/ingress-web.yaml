@@ -23,6 +23,6 @@ spec:
       services:
         - kind: 'Service'
           name: {{ .Values.serviceWeb | squote }}
-          port: 3000
+          port: 8000
   tls:
     secretName: {{ .Values.tlsSecret | squote }}

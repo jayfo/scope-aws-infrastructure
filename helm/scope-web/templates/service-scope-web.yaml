@@ -9,5 +9,6 @@ spec:
   selector:
     app: {{ .Release.Name | squote }}
   ports:
-    - port: 3000
+    - port: 8000
+      targetPort: 3000
       protocol: 'TCP'
