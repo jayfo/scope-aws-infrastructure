@@ -1,12 +1,16 @@
+#
+# Capture all traffic that attempts to access /api/.
+#
+# Priority of this rule is greater than ingress-web, this rule will happen first.
+#
+
 # https://doc.traefik.io/traefik/middlewares/stripprefix/
 
 apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'Middleware'
 
 metadata:
-  name: 'ingress-scope-app-stripprefix-api'
-  labels:
-    app: 'scope-app'
+  name: '{{ .Release.Name }}-app-stripprefix'
 
 spec:
   entrypoints:
@@ -25,22 +29,21 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'IngressRoute'
 
 metadata:
-  name: 'ingress-scope-app'
-  labels:
-    app: 'scope-app'
+  name: '{{ .Release.Name }}-app'
 
 spec:
   entryPoints:
     - 'websecure'
   routes:
     - kind: 'Rule'
-      match: 'HostRegexp(`{any:.+}`) && PathPrefix(`/api/`)'
+
+      match: 'HostRegexp(`{{ .Values.host }}`) && PathPrefix(`/api/`)'
       priority: 10000
       middlewares:
-        - name: 'ingress-scope-app-stripprefix-api'
+        - name: '{{ .Release.Name }}-app-stripprefix'
       services:
         - kind: 'Service'
-          name: 'scope-app'
-          port: 4000
+          name: {{ .Values.serviceApp | squote }}
+          port: 8000
   tls:
-    secretName: 'tls-uwscope-org'
+    secretName: {{ .Values.tlsSecret | squote }}

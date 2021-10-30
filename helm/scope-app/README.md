@@ -1,4 +1,4 @@
-# Scope-App
+# scope-app
 
 TODO.
 

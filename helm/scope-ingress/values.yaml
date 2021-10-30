@@ -1,0 +1,13 @@
+# Required values.
+#
+# Name of TLS secret to create
+# tlsSecret:
+#
+# Should be 'letsencrypt-staging' or 'letsencrypt'
+# issuer:
+#
+# List of names to issue, first name will also be used as common name
+# dnsNames:
+#   -
+#   -
+#   -

@@ -53,8 +53,9 @@ FROM node:15-alpine AS stage_build_serve
 WORKDIR /scope-web
 COPY --from=stage_git /scope-web .
 
+WORKDIR /scope-web/web_registry
 RUN yarn install
-RUN yarn web_prod_build
+RUN yarn prod_build
 
 EXPOSE 3000
-CMD ["yarn", "web_prod_serve"]
+CMD ["yarn", "prod_serve"]

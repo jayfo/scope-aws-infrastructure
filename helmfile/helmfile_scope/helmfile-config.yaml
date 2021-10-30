@@ -9,3 +9,5 @@ dependencies:
     destination: './charts/scope-web.tgz'
   - file: '../../.staging/helm_repo/scope-ingress-0.1.0.tgz'
     destination: './charts/scope-ingress.tgz'
+  - file: '../../.staging/helm_repo/scope-instance-ingress-0.1.0.tgz'
+    destination: './charts/scope-instance-ingress.tgz'

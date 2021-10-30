@@ -1,4 +1,4 @@
-# scope-ingress
+# scope-instance-ingress
 
 TODO.
 

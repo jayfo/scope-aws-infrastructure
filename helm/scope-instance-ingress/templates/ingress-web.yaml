@@ -1,3 +1,9 @@
+#
+# Capture all traffic.
+#
+# Priority of this rule is less than ingress-app, that rule will happen first.
+#
+
 # https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/
 # https://doc.traefik.io/traefik/routing/routers/
 
@@ -5,20 +11,18 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'IngressRoute'
 
 metadata:
-  name: 'ingress-scope-web'
-  labels:
-    app: 'scope-web'
+  name: '{{ .Release.Name }}-web'
 
 spec:
   entryPoints:
     - 'websecure'
   routes:
     - kind: 'Rule'
-      match: 'HostRegexp(`{any:.+}`)'
+      match: 'HostRegexp(`{{ .Values.host }}`)'
       priority: 100
       services:
         - kind: 'Service'
-          name: 'scope-web'
-          port: 3000
+          name: {{ .Values.serviceWeb | squote }}
+          port: 8000
   tls:
-    secretName: 'tls-uwscope-org'
+    secretName: {{ .Values.tlsSecret | squote }}

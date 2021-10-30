@@ -1,0 +1,15 @@
+# Required values.
+#
+# Name of TLS secret to use
+# tlsSecret:
+#
+# Name of host to match
+#   literal: example.uwscope.org
+#   regex: {any:.+}
+# host:
+#
+# Name of scope-app service
+# serviceApp:
+#
+# Name of scope-web service
+# serviceWeb:
