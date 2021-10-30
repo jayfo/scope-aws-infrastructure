@@ -44,7 +44,7 @@ RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY scope-web
 #
 # Build and serve the project. Assumptions about the project:
 # - Dependencies installed via pipenv.
-# - Server is within directory 'server'.
+# - Flask server is within directory 'server_flask'.
 # - Then serve via a `flask run`.
 # - Will listen on port 4000.
 #
@@ -58,8 +58,18 @@ FROM python:3.9 AS stage_build_serve
 WORKDIR /scope-web
 COPY --from=stage_git /scope-web .
 
+# Install pipenv
 RUN pip install pipenv
+
+# Sync root pipenv
 RUN pipenv sync --system
 
+# Sync server_flask pipenv
+WORKDIR /scope-web/server_flask
+RUN pipenv sync
+
+# Return to the root to invoke
+WORKDIR /scope-web
+
 EXPOSE 4000
-CMD ["invoke", "flask.prod"]
+CMD ["pipenv", "run", "invoke", "prod.server.flask.serve"]
