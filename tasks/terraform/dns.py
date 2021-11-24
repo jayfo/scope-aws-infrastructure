@@ -3,11 +3,11 @@ import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 from pathlib import Path
 
-import terraform_eip.tasks
+import tasks.terraform.eip
 
 CONFIG_KEY = 'dns'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform_dns'
+TERRAFORM_DIR = './terraform/terraform_dns'
 TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
 
 ns = Collection('dns')
@@ -15,7 +15,7 @@ ns = Collection('dns')
 
 # Define variables to provide to Terraform
 def terraform_variables_factory(*, context):
-    with terraform_eip.tasks.eip_read_only(context=context) as eip:
+    with tasks.terraform.eip.eip_read_only(context=context) as eip:
         return {
             'eip_public_ip': eip.output.public_ip
         }

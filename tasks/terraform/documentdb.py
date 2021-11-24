@@ -4,11 +4,11 @@ import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 from pathlib import Path
 
-import terraform_vpc.tasks
+import tasks.terraform.vpc
 
 CONFIG_KEY = 'documentdb'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform_documentdb'
+TERRAFORM_DIR = './terraform/terraform_documentdb'
 TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
 DOCUMENTDB_NAME = 'scope-documentdb'
 
@@ -17,7 +17,7 @@ ns = Collection('documentdb')
 
 # Define variables to provide to Terraform
 def terraform_variables_factory(*, context):
-    with terraform_vpc.tasks.vpc_read_only(context=context) as vpc_read_only:
+    with tasks.terraform.vpc.vpc_read_only(context=context) as vpc_read_only:
         subnet_ids = vpc_read_only.output.subnet_ids
 
     return {

@@ -5,14 +5,14 @@ import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 from pathlib import Path
 
-import terraform_documentdb.tasks
-import terraform_ecr.tasks
-import terraform_eip.tasks
-import terraform_vpc.tasks
+import tasks.terraform.documentdb
+import tasks.terraform.ecr
+import tasks.terraform.eip
+import tasks.terraform.vpc
 
 CONFIG_KEY = 'instance'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform_instance'
+TERRAFORM_DIR = './terraform/terraform_instance'
 HELM_REPO_DIR = './helm_repo'
 STAGING_LOCAL_HELMFILE_DIR = './.staging/helmfile'
 STAGING_REMOTE_HELM_DIR = './.staging/helm'
@@ -30,11 +30,11 @@ ns = Collection('instance')
 
 # Define variables to provide to Terraform
 def terraform_variables_factory(*, context):
-    with terraform_eip.tasks.eip_read_only(context=context) as eip_read_only:
+    with tasks.terraform.eip.eip_read_only(context=context) as eip_read_only:
         eip_id = eip_read_only.output.id
         eip_public_ip = eip_read_only.output.public_ip
 
-    with terraform_vpc.tasks.vpc_read_only(context=context) as vpc_read_only:
+    with tasks.terraform.vpc.vpc_read_only(context=context) as vpc_read_only:
         vpc_id = vpc_read_only.output.vpc_id
         vpc_default_security_group_id = vpc_read_only.output.default_security_group_id
         subnet_id = vpc_read_only.output.subnet_id

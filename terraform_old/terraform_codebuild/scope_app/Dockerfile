@@ -45,7 +45,7 @@ RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY scope-web
 # Build and serve the project. Assumptions about the project:
 # - Dependencies installed via pipenv.
 # - Flask server is within directory 'server_flask'.
-# - Then serve via a `flask run`.
+# - Then serve via a `invoke prod.server.flask.serve`.
 # - Will listen on port 4000.
 #
 # Do not use alpine for python:

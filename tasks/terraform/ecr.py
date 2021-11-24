@@ -1,15 +1,15 @@
 from aws_infrastructure.tasks import compose_collection
-import aws_infrastructure.tasks.library.eip
+import aws_infrastructure.tasks.library.ecr
 import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 
-CONFIG_KEY = 'eip'
+CONFIG_KEY = 'ecr'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform_eip'
+TERRAFORM_DIR = './terraform/terraform_ecr'
 
-ns = Collection('eip')
+ns = Collection('ecr')
 
-ns_eip = aws_infrastructure.tasks.library.eip.create_tasks(
+ns_ecr = aws_infrastructure.tasks.library.ecr.create_tasks(
     config_key=CONFIG_KEY,
     terraform_bin=TERRAFORM_BIN,
     terraform_dir=TERRAFORM_DIR,
@@ -17,7 +17,7 @@ ns_eip = aws_infrastructure.tasks.library.eip.create_tasks(
 
 compose_collection(
     ns,
-    ns_eip,
+    ns_ecr,
     sub=False,
     exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
@@ -31,6 +31,6 @@ compose_collection(
     )
 )
 
-eip_read_only = aws_infrastructure.tasks.library.eip.create_eip_read_only(
-    ns_eip=ns_eip
+ecr_read_only = aws_infrastructure.tasks.library.ecr.create_ecr_read_only(
+    ns_ecr=ns_ecr
 )

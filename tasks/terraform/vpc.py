@@ -1,15 +1,15 @@
 from aws_infrastructure.tasks import compose_collection
-import aws_infrastructure.tasks.library.ecr
+import aws_infrastructure.tasks.library.vpc
 import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 
-CONFIG_KEY = 'ecr'
+CONFIG_KEY = 'vpc'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform_ecr'
+TERRAFORM_DIR = './terraform/terraform_vpc'
 
-ns = Collection('ecr')
+ns = Collection('vpc')
 
-ns_ecr = aws_infrastructure.tasks.library.ecr.create_tasks(
+ns_vpc = aws_infrastructure.tasks.library.vpc.create_tasks(
     config_key=CONFIG_KEY,
     terraform_bin=TERRAFORM_BIN,
     terraform_dir=TERRAFORM_DIR,
@@ -17,7 +17,7 @@ ns_ecr = aws_infrastructure.tasks.library.ecr.create_tasks(
 
 compose_collection(
     ns,
-    ns_ecr,
+    ns_vpc,
     sub=False,
     exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
@@ -31,6 +31,6 @@ compose_collection(
     )
 )
 
-ecr_read_only = aws_infrastructure.tasks.library.ecr.create_ecr_read_only(
-    ns_ecr=ns_ecr
+vpc_read_only = aws_infrastructure.tasks.library.vpc.create_vpc_read_only(
+    ns_vpc=ns_vpc
 )
