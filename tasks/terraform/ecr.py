@@ -5,7 +5,7 @@ from invoke import Collection
 
 CONFIG_KEY = 'ecr'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/terraform_ecr'
+TERRAFORM_DIR = './terraform/ecr'
 
 ns = Collection('ecr')
 

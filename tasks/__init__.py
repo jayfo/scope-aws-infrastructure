@@ -8,7 +8,7 @@ import tasks.helm
 import tasks.aws
 # import tasks.terraform.documentdb
 import tasks.terraform.dns
-# import tasks.terraform.ecr
+import tasks.terraform.ecr
 import tasks.terraform.eip
 # import tasks.terraform.instance
 # import tasks.terraform.vpc
@@ -31,6 +31,7 @@ compose_collection(ns, tasks.helm.ns, name='helm')
 ns_terraform = Collection('terraform')
 
 compose_collection(ns_terraform, tasks.terraform.dns.ns, name='dns')
+compose_collection(ns_terraform, tasks.terraform.ecr.ns, name='ecr')
 compose_collection(ns_terraform, tasks.terraform.eip.ns, name='eip')
 
 compose_collection(ns, ns_terraform, name='terraform')
