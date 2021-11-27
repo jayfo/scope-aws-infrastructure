@@ -1,13 +1,4 @@
 /*
- * Tag created resources.
- */
-locals {
-  tags = {
-    "scope-aws-infrastructure/terraform_ecr": ""
-  }
-}
-
-/*
  * Instance of ECR Simple.
  */
 module "ecr" {

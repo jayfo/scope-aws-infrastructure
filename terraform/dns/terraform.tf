@@ -1,13 +1,4 @@
 /*
- * Tag created resources.
- */
-locals {
-  tags = {
-    "scope-aws-infrastructure/terraform_dns": ""
-  }
-}
-
-/*
  * Zone with DNS records.
  */
 module "hosted_zone" {
