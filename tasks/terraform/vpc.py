@@ -5,7 +5,7 @@ from invoke import Collection
 
 CONFIG_KEY = 'vpc'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/terraform_vpc'
+TERRAFORM_DIR = './terraform/vpc'
 
 ns = Collection('vpc')
 

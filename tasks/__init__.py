@@ -11,7 +11,7 @@ import tasks.terraform.dns
 import tasks.terraform.ecr
 import tasks.terraform.eip
 # import tasks.terraform.instance
-# import tasks.terraform.vpc
+import tasks.terraform.vpc
 
 # Enable color
 aws_infrastructure.tasks.library.color.enable_color()
@@ -33,6 +33,7 @@ ns_terraform = Collection('terraform')
 compose_collection(ns_terraform, tasks.terraform.dns.ns, name='dns')
 compose_collection(ns_terraform, tasks.terraform.ecr.ns, name='ecr')
 compose_collection(ns_terraform, tasks.terraform.eip.ns, name='eip')
+compose_collection(ns_terraform, tasks.terraform.vpc.ns, name='vpc')
 
 compose_collection(ns, ns_terraform, name='terraform')
 
