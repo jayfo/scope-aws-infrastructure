@@ -7,7 +7,7 @@ import tasks.terraform.eip
 
 CONFIG_KEY = 'dns'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/terraform_dns'
+TERRAFORM_DIR = './terraform/dns'
 TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
 
 ns = Collection('dns')

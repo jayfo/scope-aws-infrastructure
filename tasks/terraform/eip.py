@@ -5,7 +5,7 @@ from invoke import Collection
 
 CONFIG_KEY = 'eip'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/terraform_eip'
+TERRAFORM_DIR = './terraform/eip'
 
 ns = Collection('eip')
 
