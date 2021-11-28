@@ -8,7 +8,7 @@ import tasks.terraform.vpc
 
 CONFIG_KEY = 'documentdb'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/terraform_documentdb'
+TERRAFORM_DIR = './terraform/documentdb'
 TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
 DOCUMENTDB_NAME = 'scope-documentdb'
 
