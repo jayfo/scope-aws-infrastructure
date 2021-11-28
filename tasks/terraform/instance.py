@@ -12,7 +12,7 @@ import tasks.terraform.vpc
 
 CONFIG_KEY = 'instance'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/terraform_instance'
+TERRAFORM_DIR = './terraform/instance'
 HELM_REPO_DIR = './helm_repo'
 STAGING_LOCAL_HELMFILE_DIR = './.staging/helmfile'
 STAGING_REMOTE_HELM_DIR = './.staging/helm'
@@ -80,45 +80,45 @@ compose_collection(
 )
 
 
+# #
+# # A task for deploying our primary Helmfile to the instance.
+# #
 #
-# A task for deploying our primary Helmfile to the instance.
+# # Helmfile deployment requires information on accessing the DocumentDB
+# def documentdb_helmfile_values_factory(*, context):
+#     with terraform_documentdb.tasks.documentdb_read_only(context=context) as documentdb_read_only:
+#         return {
+#             'documentdbAdminUser': documentdb_read_only.output.admin_user,
+#             'documentdbAdminPassword': documentdb_read_only.output.admin_password,
+#             'documentdbEndpoint': documentdb_read_only.output.endpoint,
+#             'documentdbHosts': documentdb_read_only.output.hosts,
+#         }
 #
-
-# Helmfile deployment requires information on accessing the DocumentDB
-def documentdb_helmfile_values_factory(*, context):
-    with terraform_documentdb.tasks.documentdb_read_only(context=context) as documentdb_read_only:
-        return {
-            'documentdbAdminUser': documentdb_read_only.output.admin_user,
-            'documentdbAdminPassword': documentdb_read_only.output.admin_password,
-            'documentdbEndpoint': documentdb_read_only.output.endpoint,
-            'documentdbHosts': documentdb_read_only.output.hosts,
-        }
-
-
-# Helmfile deployment requires information on accessing the ECR
-def ecr_helmfile_values_factory(*, context):
-    with terraform_ecr.tasks.ecr_read_only(context=context) as ecr_read_only:
-        return {
-            'registryUrl': ecr_read_only.output.registry_url,
-            'registryUser': ecr_read_only.output.registry_user,
-            'registryPassword': ecr_read_only.output.registry_password,
-        }
-
-
-ssh_config_path = Path(TERRAFORM_DIR, INSTANCE_NAME, 'ssh_config.yaml')
-
-if ssh_config_path.exists():
-    task_helmfile_scope = aws_infrastructure.tasks.library.instance_helmfile.task_helmfile_apply(
-        config_key=CONFIG_KEY,
-        ssh_config_path=ssh_config_path,
-        staging_local_dir=STAGING_LOCAL_HELMFILE_DIR,
-        staging_remote_dir=STAGING_REMOTE_HELMFILE_DIR,
-        helmfile_path='./helmfile/helmfile_scope/helmfile.yaml',
-        helmfile_config_path='./helmfile/helmfile_scope/helmfile-config.yaml',
-        helmfile_values_factories={
-            'documentdb': documentdb_helmfile_values_factory,
-            'ecr': ecr_helmfile_values_factory,
-        },
-    )
-
-    ns.add_task(task_helmfile_scope, name='helmfile-scope')
+#
+# # Helmfile deployment requires information on accessing the ECR
+# def ecr_helmfile_values_factory(*, context):
+#     with terraform_ecr.tasks.ecr_read_only(context=context) as ecr_read_only:
+#         return {
+#             'registryUrl': ecr_read_only.output.registry_url,
+#             'registryUser': ecr_read_only.output.registry_user,
+#             'registryPassword': ecr_read_only.output.registry_password,
+#         }
+#
+#
+# ssh_config_path = Path(TERRAFORM_DIR, INSTANCE_NAME, 'ssh_config.yaml')
+#
+# if ssh_config_path.exists():
+#     task_helmfile_scope = aws_infrastructure.tasks.library.instance_helmfile.task_helmfile_apply(
+#         config_key=CONFIG_KEY,
+#         ssh_config_path=ssh_config_path,
+#         staging_local_dir=STAGING_LOCAL_HELMFILE_DIR,
+#         staging_remote_dir=STAGING_REMOTE_HELMFILE_DIR,
+#         helmfile_path='./helmfile/helmfile_scope/helmfile.yaml',
+#         helmfile_config_path='./helmfile/helmfile_scope/helmfile-config.yaml',
+#         helmfile_values_factories={
+#             'documentdb': documentdb_helmfile_values_factory,
+#             'ecr': ecr_helmfile_values_factory,
+#         },
+#     )
+#
+#     ns.add_task(task_helmfile_scope, name='helmfile-scope')
