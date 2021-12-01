@@ -16,8 +16,13 @@ ns = Collection('dns')
 # Define variables to provide to Terraform
 def terraform_variables_factory(*, context):
     with tasks.terraform.eip.eip_read_only(context=context) as eip:
+        # return {
+        #     'eip_public_ip': eip.output.public_ip
+        # }
+
+        # Temporarily pinned to existing aws-probe deployment in terraform_old
         return {
-            'eip_public_ip': eip.output.public_ip
+            'eip_public_ip': '35.153.174.68'
         }
 
 
