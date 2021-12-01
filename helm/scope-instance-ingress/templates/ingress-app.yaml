@@ -10,7 +10,7 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'Middleware'
 
 metadata:
-  name: '{{ .Release.Name }}-app-stripprefix'
+  name: '{{ .Release.Name }}-stripprefix-api'
 
 spec:
   entrypoints:
@@ -40,7 +40,7 @@ spec:
       match: 'HostRegexp(`{{ .Values.host }}`) && PathPrefix(`/api/`)'
       priority: 10000
       middlewares:
-        - name: '{{ .Release.Name }}-app-stripprefix'
+        - name: '{{ .Release.Name }}-stripprefix-api'
       services:
         - kind: 'Service'
           name: {{ .Values.serviceApp | squote }}
