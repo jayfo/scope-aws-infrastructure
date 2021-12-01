@@ -4,7 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-aws-infrastructure = {subdirectory = "aws_infrastructure", editable = true, git = "https://github.com/fogies/aws-infrastructure.git"}
+
+[packages.aws-infrastructure]
+git = "https://github.com/fogies/aws-infrastructure.git"
+subdirectory = "aws_infrastructure"
+editable = true
+
+################################################################################
+# When co-developing aws-infrastructure, helpful to point at a branch.
+################################################################################
+# git = "https://github.com/<accountname>/aws-infrastructure.git"
+# ref = "<branchname>"
+################################################################################
 
 [dev-packages]
 pipenv = "*"
