@@ -18,7 +18,8 @@ editable = true
 ################################################################################
 
 [dev-packages]
-pipenv = "*"
+black = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.9"
