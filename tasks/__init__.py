@@ -12,6 +12,7 @@ import tasks.terraform.ecr
 import tasks.terraform.eip
 import tasks.terraform.instance
 import tasks.terraform.vpc
+import tasks.tests
 
 # Enable color
 aws_infrastructure.tasks.library.color.enable_color()
@@ -39,7 +40,5 @@ compose_collection(ns_terraform, tasks.terraform.vpc.ns, name='vpc')
 
 compose_collection(ns, ns_terraform, name='terraform')
 
-# Compose from terraform_codebuild
-# compose_collection(ns, terraform_codebuild.tasks.ns, name='codebuild')
-
-# Need helmfile still
+# Compose from tests.py
+compose_collection(ns, tasks.tests.ns, name='tests')

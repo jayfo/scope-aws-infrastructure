@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 
-[packages.aws-infrastructure]
+[packages.aws_infrastructure]
 git = "https://github.com/fogies/aws-infrastructure.git"
 subdirectory = "aws_infrastructure"
 editable = true
@@ -17,8 +17,21 @@ editable = true
 # ref = "<branchname>"
 ################################################################################
 
+[packages.scope]
+git = "https://github.com/uwscope/scope-web.git"
+subdirectory = "scope_shared"
+editable = true
+
+################################################################################
+# When co-developing scope-web, helpful to point at a branch.
+################################################################################
+# git = "https://github.com/<accountname>/scope-web.git"
+# ref = "<branchname>"
+################################################################################
+
 [dev-packages]
-pipenv = "*"
+black = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.9"
