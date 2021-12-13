@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6f8c6f6ec24742968abbdccc140a0e30b1562106cc16c8bd62019bdedabb3473"
+            "sha256": "49c181db428e37c35fe9d6be5b3b9f51d493ff02d8e2024a1e1b1d44282ab095"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -308,6 +308,12 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==0.5.0"
+        },
+        "scope": {
+            "editable": true,
+            "git": "https://github.com/jayfo/scope-web.git",
+            "ref": "ad7a9aec99b361a49f19efb6f96f0b136a9d584d",
+            "subdirectory": "scope_shared"
         },
         "semver": {
             "hashes": [
