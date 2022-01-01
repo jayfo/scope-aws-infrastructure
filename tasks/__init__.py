@@ -53,4 +53,4 @@ compose_collection(ns_terraform, tasks.terraform.vpc.ns, name="vpc")
 compose_collection(ns, ns_terraform, name="terraform")
 
 # Compose from test.py
-compose_collection(ns, tasks.tests.ns, name="test")
+compose_collection(ns, tasks.test.ns, name="test")
