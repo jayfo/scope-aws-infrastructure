@@ -15,7 +15,7 @@ import tasks.terraform.eip
 import tasks.terraform.instance
 import tasks.terraform.userpool
 import tasks.terraform.vpc
-import tasks.tests
+import tasks.test
 
 # Enable color
 aws_infrastructure.tasks.library.color.enable_color()
@@ -52,5 +52,5 @@ compose_collection(ns_terraform, tasks.terraform.vpc.ns, name="vpc")
 
 compose_collection(ns, ns_terraform, name="terraform")
 
-# Compose from tests.py
-compose_collection(ns, tasks.tests.ns, name="tests")
+# Compose from test.py
+compose_collection(ns, tasks.tests.ns, name="test")
