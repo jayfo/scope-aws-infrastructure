@@ -11,6 +11,7 @@ import tasks.terraform.dns
 import tasks.terraform.ecr
 import tasks.terraform.eip
 import tasks.terraform.instance
+import tasks.terraform.userpool
 import tasks.terraform.vpc
 import tasks.tests
 
@@ -36,6 +37,7 @@ compose_collection(ns_terraform, tasks.terraform.documentdb.ns, name='documentdb
 compose_collection(ns_terraform, tasks.terraform.ecr.ns, name='ecr')
 compose_collection(ns_terraform, tasks.terraform.eip.ns, name='eip')
 compose_collection(ns_terraform, tasks.terraform.instance.ns, name='instance')
+compose_collection(ns_terraform, tasks.terraform.userpool.ns, name='userpool')
 compose_collection(ns_terraform, tasks.terraform.vpc.ns, name='vpc')
 
 compose_collection(ns, ns_terraform, name='terraform')
