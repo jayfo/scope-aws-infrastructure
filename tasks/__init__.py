@@ -3,8 +3,8 @@ import aws_infrastructure.tasks.library.aws_configure
 import aws_infrastructure.tasks.library.color
 from invoke import Collection
 
-# import terraform_codebuild.tasks
 import tasks.aws
+import tasks.codebuild.server_flask
 import tasks.database
 import tasks.documentdb
 import tasks.helm
@@ -29,6 +29,13 @@ ns = Collection()
 
 # Compose from aws.py
 compose_collection(ns, tasks.aws.ns, name="aws")
+
+# Compose from codebuild
+ns_codebuild = Collection("codebuild")
+
+compose_collection(ns_codebuild, tasks.codebuild.server_flask.ns, name="flask")
+
+compose_collection(ns, ns_codebuild, name="codebuild")
 
 # Compose from database.py
 compose_collection(ns, tasks.database.ns, name="database")
