@@ -6,5 +6,6 @@ module "ecr" {
 
   names = [
     "uwscope/server_flask",
+    "uwscope/web_registry",
   ]
 }

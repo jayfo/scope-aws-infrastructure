@@ -43,34 +43,23 @@ RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY cloned_repository
 # Stage build and serve
 #
 # Build and serve the project. Assumptions about the project:
-# - Dependencies installed via pipenv.
-# - Flask server is within directory 'server_flask'.
-# - Directory 'server_flask' includes its own pipenv dependencies.
-# - Then serve via a `invoke prod.server.flask.serve`.
-# - Will listen on port 4000.
+# - Web app is within directory 'web_registry'.
+# - Dependencies installed via a `yarn install`.
+# - Build via a `yarn prod_build`.
+# - Then serve via a `yarn prod_serve`.
+# - Will listen on port 3000.
 #
-# Do not use alpine for python:
-# https://pythonspeed.com/articles/alpine-docker-python/
-#
-# Do not use slim variants of Python, as they lack git.
-# Causes failure when pipenv dependencies include git dependencies.
-FROM python:3.9 AS stage_build_serve
+FROM node:15-alpine AS stage_build_serve
 
 WORKDIR /cloned_repository
 COPY --from=stage_git /cloned_repository .
 
-# Install pipenv
-RUN pip install pipenv
+# Install dependencies
+WORKDIR /cloned_repository/web_registry
+RUN yarn install
 
-# Sync root pipenv
-RUN pipenv sync
+# Pre-build web app
+RUN yarn prod_build
 
-# Sync server_flask pipenv
-WORKDIR /cloned_repository/server_flask
-RUN pipenv sync
-
-# Return to the root to invoke
-WORKDIR /cloned_repository
-
-EXPOSE 4000
-CMD ["pipenv", "run", "invoke", "prod.server.flask.serve"]
+EXPOSE 3000
+CMD ["yarn", "prod_serve"]

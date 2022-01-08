@@ -13,8 +13,6 @@ metadata:
   name: '{{ .Release.Name }}-stripprefix-api'
 
 spec:
-  entrypoints:
-    - 'websecure'
   stripPrefix:
     prefixes:
       - '/api'

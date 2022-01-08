@@ -6,12 +6,12 @@ from invoke import Collection
 
 import tasks.terraform.ecr
 
-CONFIG_KEY = 'codebuild/server_flask'
+CONFIG_KEY = 'codebuild/web_registry'
 TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/codebuild/server_flask'
-STAGING_LOCAL_DIR = './.staging/codebuild/server_flask'
-SOURCE_DIR = './docker/server_flask'
-CODEBUILD_PROJECT_NAME = 'uwscope_server_flask'
+TERRAFORM_DIR = './terraform/codebuild/web_registry'
+STAGING_LOCAL_DIR = './.staging/codebuild/web_registry'
+SOURCE_DIR = './docker/web_registry'
+CODEBUILD_PROJECT_NAME = 'uwscope_web_registry'
 
 BUILD_TIMESTAMP = datetime.now().strftime('%Y%m%d%H%M')
 
@@ -20,14 +20,14 @@ def codebuild_environment_variables_factory(*, context):
     with tasks.terraform.ecr.ecr_read_only(context=context) as ecr:
         return {
             'REGISTRY_URL': ecr.output.registry_url,
-            'REPOSITORY': 'uwscope/server_flask',
-            'REPOSITORY_URL': ecr.output.repository_urls['uwscope/server_flask'],
+            'REPOSITORY': 'uwscope/web_registry',
+            'REPOSITORY_URL': ecr.output.repository_urls['uwscope/web_registry'],
             'REPOSITORY_TAGS': 'latest {}'.format(BUILD_TIMESTAMP)
             # 'REPOSITORY_TAGS': 'demo-freeze-2021-11-08 {}'.format(BUILD_TIMESTAMP),
         }
 
 
-ns = Collection('codebuild/server_flask')
+ns = Collection('codebuild/web_registry')
 
 ns_codebuild = aws_infrastructure.tasks.library.codebuild.create_tasks(
     config_key=CONFIG_KEY,

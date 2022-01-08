@@ -13,15 +13,25 @@ releases:
   #
   ########################################
 
-  # ingress-crd contains the CRDs required by ingress
+  # ingress-crd contains CRDs required by cert-manager and by ingress
   - name: 'ingress-crd'
+    namespace: 'ingress-crd'
     chart: 'aws-infrastructure/ingress-crd'
-    version: '0.1.0'
+    version: '0.5.0'
 
-  # ingress is then the actual ingress, including Traefik and cert-manager
+  # cert-manager
+  - name: 'cert-manager'
+    namespace: 'cert-manager'
+    chart: 'aws-infrastructure/cert-manager'
+    version: '1.6.1'
+    needs:
+      - 'ingress-crd'
+
+  # ingress
   - name: 'ingress'
+    namespace: 'ingress'
     chart: 'aws-infrastructure/ingress'
-    version: '0.4.0'
+    version: '0.7.0'
     needs:
       - 'ingress-crd'
     # values:
@@ -38,7 +48,7 @@ releases:
   ########################################
 
   # scope-ingress
-  # Installed from a local chart, managed in helmfile-config.yaml
+  # Installed from a local chart, managed in helmfile_config.yaml
   - name: 'scope-ingress'
     chart: './charts/scope-ingress.tgz'
     needs:
@@ -63,23 +73,23 @@ releases:
   ########################################
 
   - name: 'demo-web'
-    # Installed from a local chart, managed in helmfile-config.yaml
+    # Installed from a local chart, managed in helmfile_config.yaml
     chart: './charts/scope-web.tgz'
     values:
-      - './values/ecr.values.yaml'
-      - imageName: 'scope_aws_infrastructure/scope_web'
-        imageTag: 'latest'
+      - './values/ecr_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'demo-freeze-2021-11-08'
 
   - name: 'demo-app'
-    # Installed from a local chart, managed in helmfile-config.yaml
+    # Installed from a local chart, managed in helmfile_config.yaml
     chart: './charts/scope-app.tgz'
     values:
-      - './values/ecr.values.yaml'
-      - imageName: 'scope_aws_infrastructure/scope_app'
-        imageTag: 'latest'
+      - './values/ecr_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'demo-freeze-2021-11-08'
 
   - name: 'demo-ingress'
-    # Installed from a local chart, managed in helmfile-config.yaml
+    # Installed from a local chart, managed in helmfile_config.yaml
     chart: './charts/scope-instance-ingress.tgz'
     needs:
       - 'ingress-crd'
@@ -97,23 +107,23 @@ releases:
   ########################################
 
   - name: 'dev-web'
-    # Installed from a local chart, managed in helmfile-config.yaml
+    # Installed from a local chart, managed in helmfile_config.yaml
     chart: './charts/scope-web.tgz'
     values:
-      - './values/ecr.values.yaml'
-      - imageName: 'scope_aws_infrastructure/scope_web'
-        imageTag: 'latest'
+      - './values/ecr_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'demo-freeze-2021-11-08'
 
   - name: 'dev-app'
-    # Installed from a local chart, managed in helmfile-config.yaml
+    # Installed from a local chart, managed in helmfile_config.yaml
     chart: './charts/scope-app.tgz'
     values:
-      - './values/ecr.values.yaml'
-      - imageName: 'scope_aws_infrastructure/scope_app'
-        imageTag: 'latest'
+      - './values/ecr_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'demo-freeze-2021-11-08'
 
   - name: 'dev-ingress'
-    # Installed from a local chart, managed in helmfile-config.yaml
+    # Installed from a local chart, managed in helmfile_config.yaml
     chart: './charts/scope-instance-ingress.tgz'
     needs:
       - 'ingress-crd'
