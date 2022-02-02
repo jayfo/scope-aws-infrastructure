@@ -5,8 +5,8 @@ import scope.tasks.database
 
 INSTANCE_SSH_CONFIG_PATH = './secrets/configuration/instance_ssh.yaml'
 DOCUMENTDB_CONFIG_PATH = './secrets/configuration/documentdb.yaml'
-DEMO_DATABASE_CONFIG_PATH = "./secrets/configuration/demo_database.yaml"
-DEV_DATABASE_CONFIG_PATH = "./secrets/configuration/dev_database.yaml"
+DEMO_DATABASE_CONFIG_PATH = "./secrets/configuration/database_demo.yaml"
+DEV_DATABASE_CONFIG_PATH = "./secrets/configuration/database_dev.yaml"
 
 
 # Build task collection
