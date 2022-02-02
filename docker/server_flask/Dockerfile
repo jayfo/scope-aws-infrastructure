@@ -2,9 +2,11 @@
 # Expected arguments
 #
 
-# GIT_REPOSITORY: GitHub repository URL (e.g., https://github.com/fogies/aws-infrastructure.git)
+# GIT_REPOSITORY:
+#   GitHub repository URL (e.g., https://github.com/fogies/aws-infrastructure.git)
 ARG GIT_REPOSITORY
-# GIT_REPOSITORY_BRANCH: Branch to use from GIT_REPOSITORY
+# GIT_REPOSITORY_BRANCH:
+#   Branch to use from GIT_REPOSITORY (e.g., main)
 ARG GIT_REPOSITORY_BRANCH
 
 #
@@ -43,10 +45,11 @@ RUN git clone -b $GIT_REPOSITORY_BRANCH $GIT_REPOSITORY cloned_repository
 # Stage build and serve
 #
 # Build and serve the project. Assumptions about the project:
-# - Dependencies installed via pipenv.
-# - Flask server is within directory 'server_flask'.
-# - Directory 'server_flask' includes its own pipenv dependencies.
-# - Then serve via a `invoke prod.server.flask.serve`.
+# - Flask server is within directory "server_flask".
+# - Dependencies installed via "pipenv sync".
+# - Then serve via a "waitress-serve" command.
+#   Do not rely on invoke because this creates hidden constraints on invoke tasks
+#   (e.g., that task setup cannot access files that will not exist in production).
 # - Will listen on port 4000.
 #
 # Do not use alpine for python:
@@ -59,18 +62,13 @@ FROM python:3.9 AS stage_build_serve
 WORKDIR /cloned_repository
 COPY --from=stage_git /cloned_repository .
 
-# Install pipenv
-RUN pip install pipenv
-
-# Sync root pipenv
-RUN pipenv sync
-
-# Sync server_flask pipenv
+# Install dependencies
 WORKDIR /cloned_repository/server_flask
+RUN pip install pipenv
 RUN pipenv sync
 
-# Return to the root to invoke
-WORKDIR /cloned_repository
+# Ensure a FLASK_ENV environment variable
+RUN echo "FLASK_ENV=production" >> .env
 
 EXPOSE 4000
-CMD ["pipenv", "run", "invoke", "prod.server.flask.serve"]
+CMD ["pipenv", "run", "waitress-serve", "--port=5000", "--call", "app:create_app"]
