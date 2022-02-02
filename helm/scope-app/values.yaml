@@ -3,6 +3,8 @@
 # registryUrl:
 # registryUser:
 # registryPassword:
+#
+# flaskConfig:
 
 imageName: 'scope_aws_infrastructure/scope_app'
 imageTag: 'latest'

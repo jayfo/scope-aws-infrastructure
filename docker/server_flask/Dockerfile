@@ -71,4 +71,4 @@ RUN pipenv sync
 RUN echo "FLASK_ENV=production" >> .env
 
 EXPOSE 4000
-CMD ["pipenv", "run", "waitress-serve", "--port=5000", "--call", "app:create_app"]
+CMD ["pipenv", "run", "waitress-serve", "--port=4000", "--call", "app:create_app"]
