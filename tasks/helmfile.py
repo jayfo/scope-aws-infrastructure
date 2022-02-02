@@ -19,7 +19,7 @@ SSH_CONFIG_PATH = Path(INSTANCE_TERRAFORM_DIR, INSTANCE_NAME, 'ssh_config.yaml')
 FLASK_DEV_CONFIG_PATH = "./secrets/configuration/flask_dev.yaml"
 
 
-# Requires information on accessing the ECR
+# Information for accessing the ECR
 def ecr_helmfile_values_factory(*, context):
     with tasks.terraform.ecr.ecr_read_only(context=context) as ecr_read_only:
         return {
@@ -29,12 +29,23 @@ def ecr_helmfile_values_factory(*, context):
         }
 
 
-# Requires flask_server configuration
+# Information for configuring server_flask
 def flask_dev_values_factory(*, context):
     flask_dev_config = scope.config.FlaskConfig.load(FLASK_DEV_CONFIG_PATH)
 
     return {
         "flaskConfig": flask_dev_config.encode()
+    }
+
+
+# Information for configuring web_registry
+def web_registry_dev_values_factory(*, context):
+    flask_client_dev_config = scope.config.FlaskClientConfig.load(FLASK_DEV_CONFIG_PATH)
+
+    return {
+        "webRegistryConfig": {
+            "flaskBaseUrl": flask_client_dev_config.baseurl,
+        }
     }
 
 
@@ -48,6 +59,7 @@ task_helmfile_apply = aws_infrastructure.tasks.library.instance_helmfile.task_he
     helmfile_values_factories={
         'ecr_generated': ecr_helmfile_values_factory,
         'flask_dev_generated': flask_dev_values_factory,
+        'web_registry_dev_generated': web_registry_dev_values_factory,
     },
 )
 task_helmfile_apply.__doc__ = 'Apply helmfile/uwscope/helmfile.yaml in the instance.'
