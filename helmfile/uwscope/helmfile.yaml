@@ -1,0 +1,148 @@
+repositories:
+  # aws-infrastructure helm repository
+  #
+  # When developing charts that will later be merged, it can be helpful to instead point at a branch:
+  # url: 'https://raw.githubusercontent.com/<account>/aws-infrastructure/<branch>/helm_repo/'
+  - name: 'aws-infrastructure'
+    url: 'https://raw.githubusercontent.com/fogies/aws-infrastructure/main/helm_repo/'
+
+releases:
+  ########################################
+  #
+  # Our basic ingress requirements.
+  #
+  ########################################
+
+  # ingress-crd contains CRDs required by cert-manager and by ingress
+  - name: 'ingress-crd'
+    namespace: 'ingress-crd'
+    chart: 'aws-infrastructure/ingress-crd'
+    version: '0.5.0'
+
+  # cert-manager
+  - name: 'cert-manager'
+    namespace: 'cert-manager'
+    chart: 'aws-infrastructure/cert-manager'
+    version: '1.6.1'
+    needs:
+      - 'ingress-crd'
+
+  # ingress
+  - name: 'ingress'
+    namespace: 'ingress'
+    chart: 'aws-infrastructure/ingress'
+    version: '0.7.0'
+    needs:
+      - 'ingress-crd'
+    # values:
+    #   - # To enable DEBUG logging for Traefik
+    #     traefik:
+    #       logs:
+    #         general:
+    #           level: 'DEBUG'
+
+  ########################################
+  #
+  # Certificate and basic ingress used by all instances.
+  #
+  ########################################
+
+  # scope-ingress
+  # Installed from a local chart, managed in helmfile_config.yaml
+  - name: 'scope-ingress'
+    chart: './charts/scope-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+    values:
+      - # Name of TLS secret to create
+        tlsSecret: 'tls-uwscope-org'
+        # Should be 'letsencrypt-staging' or 'letsencrypt'
+        issuer: 'letsencrypt'
+        # List of names to issue
+        dnsNames:
+          # First name will also be used as common name
+          - 'uwscope.org'
+          - 'www.uwscope.org'
+          - 'demo.uwscope.org'
+          - 'dev.uwscope.org'
+
+  ########################################
+  #
+  # Demo deployment
+  #
+  ########################################
+
+  - name: 'demo-web-registry'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_registry_demo_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'demo-freeze-2022-02-02'
+
+  - name: 'demo-server-flask'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-app.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/flask_demo_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'demo-freeze-2022-02-02'
+
+  - name: 'demo-ingress'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-instance-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+    values:
+      - # Name of TLS secret to use
+        tlsSecret: 'tls-uwscope-org'
+        host: 'demo.uwscope.org'
+        serviceApp: 'demo-server-flask'
+        serviceWeb: 'demo-web-registry'
+
+  ########################################
+  #
+  # Dev deployment
+  #
+  ########################################
+
+  - name: 'dev-web-registry'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_registry_dev_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'demo-freeze-2022-02-02'
+
+  - name: 'dev-server-flask'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-app.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/flask_dev_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'demo-freeze-2022-02-02'
+
+  - name: 'dev-ingress'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-instance-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+    values:
+      - # Name of TLS secret to use
+        tlsSecret: 'tls-uwscope-org'
+        host: 'dev.uwscope.org'
+        serviceApp: 'dev-server-flask'
+        serviceWeb: 'dev-web-registry'
+
+
+helmDefaults:
+  # Prefer explicit management of CRDs via releases
+  args:
+    - '--skip-crds'
+
+# Prefer explicit errors
+missingFileHandler: 'Error'

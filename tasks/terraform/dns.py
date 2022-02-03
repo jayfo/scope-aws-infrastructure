@@ -5,24 +5,19 @@ from pathlib import Path
 
 import tasks.terraform.eip
 
-CONFIG_KEY = 'dns'
-TERRAFORM_BIN = './bin/terraform.exe'
-TERRAFORM_DIR = './terraform/dns'
-TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, 'variables.generated.tfvars')
+CONFIG_KEY = "dns"
+TERRAFORM_BIN = "./bin/terraform.exe"
+TERRAFORM_DIR = "./terraform/dns"
+TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, "variables.generated.tfvars")
 
-ns = Collection('dns')
+ns = Collection("dns")
 
 
 # Define variables to provide to Terraform
 def terraform_variables_factory(*, context):
     with tasks.terraform.eip.eip_read_only(context=context) as eip:
-        # return {
-        #     'eip_public_ip': eip.output.public_ip
-        # }
-
-        # Temporarily pinned to existing aws-probe deployment in terraform_old
         return {
-            'eip_public_ip': '35.153.174.68'
+            "eip_public_ip": eip.output.public_ip,
         }
 
 
@@ -41,11 +36,11 @@ compose_collection(
     exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
         exclude=[
-            'init',
-            'output',
+            "init",
+            "output",
         ],
         exclude_without_state=[
-            'destroy',
-        ]
-    )
+            "destroy",
+        ],
+    ),
 )

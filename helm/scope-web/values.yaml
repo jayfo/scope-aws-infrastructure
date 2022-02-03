@@ -3,6 +3,8 @@
 # registryUrl:
 # registryUser:
 # registryPassword:
+#
+# webRegistryConfig:
 
 imageName: 'scope_aws_infrastructure/scope_web'
 imageTag: 'latest'
