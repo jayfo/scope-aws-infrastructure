@@ -77,16 +77,18 @@ releases:
     chart: './charts/scope-web.tgz'
     values:
       - './values/ecr_generated.values.yaml'
+      - './values/web_registry_demo_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'demo-freeze-2021-11-08'
+        imageTag: 'demo-freeze-2022-02-02'
 
   - name: 'demo-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
     chart: './charts/scope-app.tgz'
     values:
       - './values/ecr_generated.values.yaml'
+      - './values/flask_demo_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'demo-freeze-2021-11-08'
+        imageTag: 'demo-freeze-2022-02-02'
 
   - name: 'demo-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
