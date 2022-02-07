@@ -74,7 +74,7 @@ releases:
 
   - name: 'demo-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-web.tgz'
+    chart: './charts/scope-web-registry.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_demo_generated.values.yaml'
@@ -83,7 +83,7 @@ releases:
 
   - name: 'demo-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-app.tgz'
+    chart: './charts/scope-flask-server.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/flask_demo_generated.values.yaml'
@@ -110,7 +110,7 @@ releases:
 
   - name: 'dev-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-web.tgz'
+    chart: './charts/scope-web-registry.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_dev_generated.values.yaml'
@@ -119,7 +119,7 @@ releases:
 
   - name: 'dev-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-app.tgz'
+    chart: './charts/scope-flask-server.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/flask_dev_generated.values.yaml'

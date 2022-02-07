@@ -1,7 +1,7 @@
 apiVersion: v2
 type: application
 
-name: scope-app
+name: scope-web-registry
 description: TODO
 
 # Chart version, expected to follow Semantic Versioning <https://semver.org/>

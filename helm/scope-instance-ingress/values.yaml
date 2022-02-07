@@ -8,8 +8,8 @@
 #   regex: {any:.+}
 # host:
 #
-# Name of scope-app service
+# Name of scope-flask-server service
 # serviceApp:
 #
-# Name of scope-web service
+# Name of scope-web-registry service
 # serviceWeb:
