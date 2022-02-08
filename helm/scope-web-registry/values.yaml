@@ -6,5 +6,5 @@
 #
 # webRegistryConfig:
 
-imageName: 'scope_aws_infrastructure/scope_web'
+imageName: 'scope_aws_infrastructure/scope_web_registry'
 imageTag: 'latest'

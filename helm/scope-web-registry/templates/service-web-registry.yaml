@@ -29,7 +29,7 @@ metadata:
     app: "{{ .Release.Name }}"
 
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: "{{ .Release.Name }}"
@@ -62,8 +62,6 @@ spec:
             name: "{{ .Release.Name }}-configmap-config"
       imagePullSecrets:
         - name: "{{ .Release.Name }}-secret-image-pull"
-
----
 
 ---
 
