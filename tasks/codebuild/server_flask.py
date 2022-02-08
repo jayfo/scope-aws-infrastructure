@@ -24,7 +24,8 @@ def codebuild_environment_variables_factory(*, context):
             "REPOSITORY_URL": ecr.output.repository_urls["uwscope/server_flask"],
             # 'REPOSITORY_TAGS': 'latest {}'.format(BUILD_TIMESTAMP),
             # 'REPOSITORY_TAGS': 'demo-freeze-2021-11-08 {}'.format(BUILD_TIMESTAMP),
-            "REPOSITORY_TAGS": "demo-freeze-2022-02-02 {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "demo-freeze-2022-02-02 {}".format(BUILD_TIMESTAMP),
+            "REPOSITORY_TAGS": "demo-freeze-2022-02-07 {}".format(BUILD_TIMESTAMP),
         }
 
 
