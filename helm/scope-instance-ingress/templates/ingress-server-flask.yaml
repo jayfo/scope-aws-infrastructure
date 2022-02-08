@@ -20,6 +20,8 @@ spec:
 
 ---
 
+{{ if .Values.hostFlask }}
+
 # https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/
 # https://doc.traefik.io/traefik/routing/routers/
 
@@ -27,7 +29,7 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'IngressRoute'
 
 metadata:
-  name: '{{ .Release.Name }}-app'
+  name: '{{ .Release.Name }}-server-flask-host-flask'
 
 spec:
   entryPoints:
@@ -35,13 +37,79 @@ spec:
   routes:
     - kind: 'Rule'
 
-      match: 'HostRegexp(`{{ .Values.host }}`) && PathPrefix(`/api/`)'
+      match: 'HostRegexp(`{{ .Values.hostFlask }}`) && PathPrefix(`/api/`)'
       priority: 10000
       middlewares:
         - name: '{{ .Release.Name }}-stripprefix-api'
       services:
         - kind: 'Service'
-          name: {{ .Values.serviceApp | squote }}
+          name: {{ .Values.serviceServerFlask | squote }}
           port: 8000
   tls:
     secretName: {{ .Values.tlsSecret | squote }}
+
+{{ end }}
+
+---
+
+{{ if .Values.hostPatient }}
+
+# https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/
+# https://doc.traefik.io/traefik/routing/routers/
+
+apiVersion: 'traefik.containo.us/v1alpha1'
+kind: 'IngressRoute'
+
+metadata:
+  name: '{{ .Release.Name }}-server-flask-host-patient'
+
+spec:
+  entryPoints:
+    - 'websecure'
+  routes:
+    - kind: 'Rule'
+
+      match: 'HostRegexp(`{{ .Values.hostPatient }}`) && PathPrefix(`/api/`)'
+      priority: 10000
+      middlewares:
+        - name: '{{ .Release.Name }}-stripprefix-api'
+      services:
+        - kind: 'Service'
+          name: {{ .Values.serviceServerFlask | squote }}
+          port: 8000
+  tls:
+    secretName: {{ .Values.tlsSecret | squote }}
+
+{{- end }}
+
+---
+
+{{ if .Values.hostRegistry }}
+
+# https://doc.traefik.io/traefik/routing/providers/kubernetes-crd/
+# https://doc.traefik.io/traefik/routing/routers/
+
+apiVersion: 'traefik.containo.us/v1alpha1'
+kind: 'IngressRoute'
+
+metadata:
+  name: '{{ .Release.Name }}-server-flask-host-registry'
+
+spec:
+  entryPoints:
+    - 'websecure'
+  routes:
+    - kind: 'Rule'
+
+      match: 'HostRegexp(`{{ .Values.hostRegistry }}`) && PathPrefix(`/api/`)'
+      priority: 10000
+      middlewares:
+        - name: '{{ .Release.Name }}-stripprefix-api'
+      services:
+        - kind: 'Service'
+          name: {{ .Values.serviceServerFlask | squote }}
+          port: 8000
+  tls:
+    secretName: {{ .Values.tlsSecret | squote }}
+
+{{ end }}

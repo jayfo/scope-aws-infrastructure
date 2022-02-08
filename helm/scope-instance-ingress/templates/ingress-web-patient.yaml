@@ -11,18 +11,18 @@ apiVersion: 'traefik.containo.us/v1alpha1'
 kind: 'IngressRoute'
 
 metadata:
-  name: '{{ .Release.Name }}-web-registry'
+  name: '{{ .Release.Name }}-web-patient'
 
 spec:
   entryPoints:
     - 'websecure'
   routes:
     - kind: 'Rule'
-      match: 'HostRegexp(`{{ or .Values.hostRegistry .Values.hostFlask }}`)'
+      match: 'HostRegexp(`{{ or .Values.hostPatient .Values.hostFlask }}`)'
       priority: 100
       services:
         - kind: 'Service'
-          name: {{ .Values.serviceWebRegistry | squote }}
+          name: {{ .Values.serviceWebPatient | squote }}
           port: 8000
   tls:
     secretName: {{ .Values.tlsSecret | squote }}
