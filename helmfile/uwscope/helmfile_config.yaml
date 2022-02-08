@@ -5,6 +5,8 @@ helmfile: 'helmfile.yaml'
 dependencies:
   - file: '../../.staging/helm_repo/scope-flask-server-0.1.0.tgz'
     destination: './charts/scope-flask-server.tgz'
+  - file: '../../.staging/helm_repo/scope-web-patient-0.1.0.tgz'
+    destination: './charts/scope-web-patient.tgz'
   - file: '../../.staging/helm_repo/scope-web-registry-0.1.0.tgz'
     destination: './charts/scope-web-registry.tgz'
   - file: '../../.staging/helm_repo/scope-ingress-0.1.0.tgz'
