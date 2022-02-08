@@ -1,0 +1,10 @@
+# Required values.
+#
+# registryUrl:
+# registryUser:
+# registryPassword:
+#
+# webRegistryConfig:
+
+imageName: 'scope_aws_infrastructure/scope_web_patient'
+imageTag: 'latest'
