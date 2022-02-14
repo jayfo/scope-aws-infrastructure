@@ -6,9 +6,9 @@ module "minikube_ami" {
 
   # UW Scope
   owner_id = "522780171838"
-  instance_type = "t3.medium"
+  instance_type = "t3.xlarge"
   docker_volume_size = "50"
-  build_timestamp = "20211128072923"
+  build_timestamp = "20220213225548"
 }
 
 /*
@@ -20,7 +20,7 @@ module "minikube_instance" {
   name = "instance"
 
   ami_id = module.minikube_ami.id
-  aws_instance_type = "t3.medium"
+  aws_instance_type = "t3.xlarge"
 
   vpc_id = var.vpc_id
   vpc_default_security_group_id = var.vpc_default_security_group_id
