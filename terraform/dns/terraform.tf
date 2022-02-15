@@ -22,12 +22,10 @@ module "hosted_zone" {
       name = "demo.uwscope.org",
       ip = var.eip_public_ip,
     },
-    /* Demo Patient Deployment */
     {
       name = "app.demo.uwscope.org",
       ip = var.eip_public_ip,
     },
-    /* Demo Registry Deployment */
     {
       name = "registry.demo.uwscope.org",
       ip = var.eip_public_ip,
@@ -38,14 +36,40 @@ module "hosted_zone" {
       name = "dev.uwscope.org",
       ip = var.eip_public_ip,
     },
-    /* Dev Registry Deployment */
     {
       name = "registry.dev.uwscope.org",
       ip = var.eip_public_ip,
     },
-    /* Dev Patient Deployment */
     {
       name = "app.dev.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+
+    /* Multicare Deployment */
+    {
+      name = "multicare.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "app.multicare.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "registry.multicare.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+
+    /* SCCA Deployment */
+    {
+      name = "scca.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "app.scca.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "registry.scca.uwscope.org",
       ip = var.eip_public_ip,
     },
   ]

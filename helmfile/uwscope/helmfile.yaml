@@ -63,10 +63,22 @@ releases:
           # First name will also be used as common name
           - 'uwscope.org'
           - 'www.uwscope.org'
+          # Demo domains
           - 'demo.uwscope.org'
           - 'app.demo.uwscope.org'
+          - 'registry.demo.uwscope.org'
+          # Dev domains
           - 'dev.uwscope.org'
           - 'app.dev.uwscope.org'
+          - 'registry.dev.uwscope.org'
+          # Multicare domains
+          - 'multicare.uwscope.org'
+          - 'app.multicare.uwscope.org'
+          - 'registry.multicare.uwscope.org'
+          # SCCA domains
+          - 'scca.uwscope.org'
+          - 'app.scca.uwscope.org'
+          - 'registry.scca.uwscope.org'
 
   ########################################
   #
