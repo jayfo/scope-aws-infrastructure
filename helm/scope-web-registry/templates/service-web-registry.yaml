@@ -1,5 +1,5 @@
 #
-# Service, Deployment, and ConfigMap for server_flask.
+# Service, Deployment, and ConfigMap for web_registry.
 #
 
 ---
@@ -16,7 +16,7 @@ spec:
     app: "{{ .Release.Name }}"
   ports:
     - port: 8000
-      targetPort: 4000
+      targetPort: 3000
       protocol: "TCP"
 
 ---
@@ -29,7 +29,6 @@ metadata:
     app: "{{ .Release.Name }}"
 
 spec:
-  # TODO: Current 1 replica because of internal state, increase when stateless
   replicas: 1
   selector:
     matchLabels:
@@ -44,19 +43,17 @@ spec:
           image: {{ (printf "%s/%s:%s" .Values.registryUrl .Values.imageName .Values.imageTag) | quote }}
           imagePullPolicy: "Always"
           ports:
-            - containerPort: 4000
+            - containerPort: 3000
           volumeMounts:
             - name: "{{ .Release.Name }}-config"
-              mountPath: "/cloned_repository/server_flask/instance/"
+              mountPath: "/cloned_repository/web_registry/dist/config/"
           resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
             limits:
-              cpu: "100m"
-#            requests:
-#              cpu: 100m
-#              memory: 128Mi
-#            limits:
-#              cpu: 250m
-#              memory: 256Mi
+              cpu: 250m
+              memory: 256Mi
       volumes:
         - name: "{{ .Release.Name }}-config"
           configMap:
@@ -71,5 +68,7 @@ kind: "ConfigMap"
 metadata:
   name: "{{ .Release.Name }}-configmap-config"
 data:
-  flask_config.yaml: |
-{{ .Values.flaskConfig | toYaml | indent 4 }}
+  clientConfig.js: |
+    const CLIENT_CONFIG = {
+      "flaskBaseUrl": "{{ .Values.webRegistryConfig.flaskBaseUrl }}"
+    };

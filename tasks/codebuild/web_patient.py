@@ -6,12 +6,12 @@ from invoke import Collection
 
 import tasks.terraform.ecr
 
-CONFIG_KEY = "codebuild/web_registry"
+CONFIG_KEY = "codebuild/web_patient"
 TERRAFORM_BIN = "./bin/terraform.exe"
-TERRAFORM_DIR = "./terraform/codebuild/web_registry"
-STAGING_LOCAL_DIR = "./.staging/codebuild/web_registry"
-SOURCE_DIR = "./docker/web_registry"
-CODEBUILD_PROJECT_NAME = "uwscope_web_registry"
+TERRAFORM_DIR = "./terraform/codebuild/web_patient"
+STAGING_LOCAL_DIR = "./.staging/codebuild/web_patient"
+SOURCE_DIR = "./docker/web_patient"
+CODEBUILD_PROJECT_NAME = "uwscope_web_patient"
 
 BUILD_TIMESTAMP = datetime.now().strftime("%Y%m%d%H%M")
 
@@ -20,11 +20,9 @@ def codebuild_environment_variables_factory(*, context):
     with tasks.terraform.ecr.ecr_read_only(context=context) as ecr:
         return {
             "REGISTRY_URL": ecr.output.registry_url,
-            "REPOSITORY": "uwscope/web_registry",
-            "REPOSITORY_URL": ecr.output.repository_urls["uwscope/web_registry"],
+            "REPOSITORY": "uwscope/web_patient",
+            "REPOSITORY_URL": ecr.output.repository_urls["uwscope/web_patient"],
             # 'REPOSITORY_TAGS': 'latest {}'.format(BUILD_TIMESTAMP),
-            # 'REPOSITORY_TAGS': 'demo-freeze-2021-11-08 {}'.format(BUILD_TIMESTAMP),
-            # "REPOSITORY_TAGS": "demo-freeze-2022-02-02 {}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "demo-freeze-2022-02-07 {}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "demo-freeze-2022-02-14 {}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "demo-freeze-2022-02-15 {}".format(BUILD_TIMESTAMP),
@@ -32,7 +30,7 @@ def codebuild_environment_variables_factory(*, context):
         }
 
 
-ns = Collection("codebuild/web_registry")
+ns = Collection("codebuild/web_patient")
 
 ns_codebuild = aws_infrastructure.tasks.library.codebuild.create_tasks(
     config_key=CONFIG_KEY,

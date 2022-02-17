@@ -6,10 +6,15 @@
 # Name of host to match
 #   literal: example.uwscope.org
 #   regex: {any:.+}
-# host:
+# hostFlask:
+# hostPatient:
+# hostRegistry:
 #
-# Name of scope-app service
-# serviceApp:
+# Name of scope-flask-server service
+# serviceServerFlask:
 #
-# Name of scope-web service
-# serviceWeb:
+# Name of scope-web-patient service
+# serviceWebPatient:
+#
+# Name of scope-web-registry service
+# serviceWebRegistry:

@@ -1,4 +1,4 @@
-# scope-web
+# scope-web-registry
 
 TODO.
 

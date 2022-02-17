@@ -1,7 +1,7 @@
 apiVersion: v2
 type: application
 
-name: scope-web
+name: scope-flask-server
 description: TODO
 
 # Chart version, expected to follow Semantic Versioning <https://semver.org/>

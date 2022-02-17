@@ -5,6 +5,7 @@ from invoke import Collection
 
 import tasks.aws
 import tasks.codebuild.server_flask
+import tasks.codebuild.web_patient
 import tasks.codebuild.web_registry
 import tasks.database
 import tasks.documentdb
@@ -36,6 +37,7 @@ compose_collection(ns, tasks.aws.ns, name="aws")
 ns_codebuild = Collection("codebuild")
 
 compose_collection(ns_codebuild, tasks.codebuild.server_flask.ns, name="server_flask")
+compose_collection(ns_codebuild, tasks.codebuild.web_patient.ns, name="web_patient")
 compose_collection(ns_codebuild, tasks.codebuild.web_registry.ns, name="web_registry")
 
 compose_collection(ns, ns_codebuild, name="codebuild")

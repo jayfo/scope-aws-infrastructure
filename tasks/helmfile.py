@@ -39,6 +39,17 @@ def flask_demo_values_factory(*, context):
     }
 
 
+# Information for configuring web_patient
+def web_patient_demo_values_factory(*, context):
+    flask_client_dev_config = scope.config.FlaskClientConfig.load(FLASK_DEMO_CONFIG_PATH)
+
+    return {
+        "webPatientConfig": {
+            "flaskBaseUrl": "https://app.demo.uwscope.org/api/",
+        }
+    }
+
+
 # Information for configuring web_registry
 def web_registry_demo_values_factory(*, context):
     flask_client_demo_config = scope.config.FlaskClientConfig.load(
@@ -47,7 +58,7 @@ def web_registry_demo_values_factory(*, context):
 
     return {
         "webRegistryConfig": {
-            "flaskBaseUrl": flask_client_demo_config.baseurl,
+            "flaskBaseUrl": "https://registry.demo.uwscope.org/api/",
         }
     }
 
@@ -61,13 +72,24 @@ def flask_dev_values_factory(*, context):
     }
 
 
+# Information for configuring web_patient
+def web_patient_dev_values_factory(*, context):
+    flask_client_dev_config = scope.config.FlaskClientConfig.load(FLASK_DEV_CONFIG_PATH)
+
+    return {
+        "webPatientConfig": {
+            "flaskBaseUrl": "https://app.dev.uwscope.org/api/",
+        }
+    }
+
+
 # Information for configuring web_registry
 def web_registry_dev_values_factory(*, context):
     flask_client_dev_config = scope.config.FlaskClientConfig.load(FLASK_DEV_CONFIG_PATH)
 
     return {
         "webRegistryConfig": {
-            "flaskBaseUrl": flask_client_dev_config.baseurl,
+            "flaskBaseUrl": "https://registry.dev.uwscope.org/api/",
         }
     }
 
@@ -83,8 +105,10 @@ task_helmfile_apply = (
         helmfile_values_factories={
             "ecr_generated": ecr_helmfile_values_factory,
             "flask_demo_generated": flask_dev_values_factory,
-            "web_registry_demo_generated": web_registry_dev_values_factory,
+            "web_patient_demo_generated": web_patient_demo_values_factory,
+            "web_registry_demo_generated": web_registry_demo_values_factory,
             "flask_dev_generated": flask_dev_values_factory,
+            "web_patient_dev_generated": web_patient_dev_values_factory,
             "web_registry_dev_generated": web_registry_dev_values_factory,
         },
     )

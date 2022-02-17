@@ -63,8 +63,22 @@ releases:
           # First name will also be used as common name
           - 'uwscope.org'
           - 'www.uwscope.org'
+          # Demo domains
           - 'demo.uwscope.org'
+          - 'app.demo.uwscope.org'
+          - 'registry.demo.uwscope.org'
+          # Dev domains
           - 'dev.uwscope.org'
+          - 'app.dev.uwscope.org'
+          - 'registry.dev.uwscope.org'
+          # Multicare domains
+          - 'multicare.uwscope.org'
+          - 'app.multicare.uwscope.org'
+          - 'registry.multicare.uwscope.org'
+          # SCCA domains
+          - 'scca.uwscope.org'
+          - 'app.scca.uwscope.org'
+          - 'registry.scca.uwscope.org'
 
   ########################################
   #
@@ -72,23 +86,32 @@ releases:
   #
   ########################################
 
+  - name: 'demo-web-patient'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-patient.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_patient_demo_generated.values.yaml'
+      - imageName: 'uwscope/web_patient'
+        imageTag: 'freeze-2022-02-16'
+
   - name: 'demo-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-web.tgz'
+    chart: './charts/scope-web-registry.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_demo_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'demo-freeze-2022-02-02'
+        imageTag: 'freeze-2022-02-16'
 
   - name: 'demo-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-app.tgz'
+    chart: './charts/scope-flask-server.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/flask_demo_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'demo-freeze-2022-02-02'
+        imageTag: 'freeze-2022-02-16'
 
   - name: 'demo-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -98,9 +121,12 @@ releases:
     values:
       - # Name of TLS secret to use
         tlsSecret: 'tls-uwscope-org'
-        host: 'demo.uwscope.org'
-        serviceApp: 'demo-server-flask'
-        serviceWeb: 'demo-web-registry'
+        hostFlask: 'demo.uwscope.org'
+        hostPatient: 'app.demo.uwscope.org'
+        hostRegistry: 'registry.demo.uwscope.org'
+        serviceServerFlask: 'demo-server-flask'
+        serviceWebPatient: 'demo-web-patient'
+        serviceWebRegistry: 'demo-web-registry'
 
   ########################################
   #
@@ -108,23 +134,32 @@ releases:
   #
   ########################################
 
+  - name: 'dev-web-patient'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-patient.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_patient_dev_generated.values.yaml'
+      - imageName: 'uwscope/web_patient'
+        imageTag: 'freeze-2022-02-16'
+
   - name: 'dev-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-web.tgz'
+    chart: './charts/scope-web-registry.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_dev_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'demo-freeze-2022-02-02'
+        imageTag: 'freeze-2022-02-16'
 
   - name: 'dev-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-app.tgz'
+    chart: './charts/scope-flask-server.tgz'
     values:
       - './values/ecr_generated.values.yaml'
       - './values/flask_dev_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'demo-freeze-2022-02-02'
+        imageTag: 'freeze-2022-02-16'
 
   - name: 'dev-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -134,9 +169,12 @@ releases:
     values:
       - # Name of TLS secret to use
         tlsSecret: 'tls-uwscope-org'
-        host: 'dev.uwscope.org'
-        serviceApp: 'dev-server-flask'
-        serviceWeb: 'dev-web-registry'
+        hostFlask: 'dev.uwscope.org'
+        hostPatient: 'app.dev.uwscope.org'
+        hostRegistry: 'registry.dev.uwscope.org'
+        serviceServerFlask: 'dev-server-flask'
+        serviceWebPatient: 'dev-web-patient'
+        serviceWebRegistry: 'dev-web-registry'
 
 
 helmDefaults:
