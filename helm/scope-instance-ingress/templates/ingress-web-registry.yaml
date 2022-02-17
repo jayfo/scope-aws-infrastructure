@@ -18,7 +18,7 @@ spec:
     - 'websecure'
   routes:
     - kind: 'Rule'
-      match: 'HostRegexp(`{{ or .Values.hostRegistry .Values.hostFlask }}`)'
+      match: 'HostRegexp(`{{ .Values.hostRegistry }}`)'
       priority: 100
       services:
         - kind: 'Service'
