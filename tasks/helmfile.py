@@ -104,12 +104,14 @@ task_helmfile_apply = (
         helmfile_config_path=HELMFILE_CONFIG_PATH,
         helmfile_values_factories={
             "ecr_generated": ecr_helmfile_values_factory,
-            "flask_demo_generated": flask_dev_values_factory,
-            "web_patient_demo_generated": web_patient_demo_values_factory,
-            "web_registry_demo_generated": web_registry_demo_values_factory,
+            # Dev Values
             "flask_dev_generated": flask_dev_values_factory,
             "web_patient_dev_generated": web_patient_dev_values_factory,
             "web_registry_dev_generated": web_registry_dev_values_factory,
+            # Demo Values
+            "flask_demo_generated": flask_demo_values_factory,
+            "web_patient_demo_generated": web_patient_demo_values_factory,
+            "web_registry_demo_generated": web_registry_demo_values_factory,
         },
     )
 )
