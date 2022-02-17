@@ -93,7 +93,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_patient_demo_generated.values.yaml'
       - imageName: 'uwscope/web_patient'
-        imageTag: 'demo-freeze-2022-02-15'
+        imageTag: 'demo-freeze-2022-02-16'
 
   - name: 'demo-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -102,7 +102,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_demo_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'demo-freeze-2022-02-15'
+        imageTag: 'demo-freeze-2022-02-16'
 
   - name: 'demo-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -111,7 +111,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/flask_demo_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'demo-freeze-2022-02-15'
+        imageTag: 'demo-freeze-2022-02-16'
 
   - name: 'demo-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -141,7 +141,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_patient_dev_generated.values.yaml'
       - imageName: 'uwscope/web_patient'
-        imageTag: 'demo-freeze-2022-02-15'
+        imageTag: 'demo-freeze-2022-02-16'
 
   - name: 'dev-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -150,7 +150,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_dev_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'demo-freeze-2022-02-15'
+        imageTag: 'demo-freeze-2022-02-16'
 
   - name: 'dev-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -159,7 +159,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/flask_dev_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'demo-freeze-2022-02-15'
+        imageTag: 'demo-freeze-2022-02-16'
 
   - name: 'dev-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml

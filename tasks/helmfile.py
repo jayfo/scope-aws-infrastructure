@@ -58,7 +58,7 @@ def web_registry_demo_values_factory(*, context):
 
     return {
         "webRegistryConfig": {
-            "flaskBaseUrl": flask_client_demo_config.baseurl,
+            "flaskBaseUrl": "https://registry.demo.uwscope.org/api/",
         }
     }
 
@@ -89,7 +89,7 @@ def web_registry_dev_values_factory(*, context):
 
     return {
         "webRegistryConfig": {
-            "flaskBaseUrl": "https://dev.uwscope.org/api/",
+            "flaskBaseUrl": "https://registry.dev.uwscope.org/api/",
         }
     }
 
