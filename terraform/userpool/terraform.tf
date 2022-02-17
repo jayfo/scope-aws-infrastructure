@@ -8,6 +8,18 @@ resource "aws_cognito_user_pool" "userpool" {
     allow_admin_create_user_only = true
   }
 
+  password_policy {
+    # Password generated at account creation is good for 90 days
+    temporary_password_validity_days = 90
+
+    # These are the defaults
+    minimum_length = 8
+    require_lowercase = true
+    require_numbers = true
+    require_symbols = true
+    require_uppercase = true
+  }
+
   # TODO: MFA requires SMS
 
   # TODO: Require verification of email?
