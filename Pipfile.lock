@@ -19,7 +19,7 @@
         "aws-infrastructure": {
             "editable": true,
             "git": "https://github.com/fogies/aws-infrastructure.git",
-            "ref": "0332414b8c48577ba76b9e62812f591e0c1f1cb8",
+            "ref": "ff719810f15195edeaf4fba42ed0be8908519760",
             "subdirectory": "aws_infrastructure"
         },
         "bcrypt": {
@@ -478,7 +478,7 @@
         "scope": {
             "editable": true,
             "git": "https://github.com/uwscope/scope-web.git",
-            "ref": "1e70423a92ef5cd080ca908d55b702395a6f0804",
+            "ref": "0ed7de3c71cf59fe16072226c1685676496bd81b",
             "subdirectory": "scope_shared"
         },
         "semver": {
