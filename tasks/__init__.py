@@ -31,7 +31,7 @@ aws_infrastructure.tasks.library.aws_configure.apply_aws_env(
 ns = Collection()
 
 # Compose from aws.py
-compose_collection(ns, tasks.aws.ns, name="aws")
+# compose_collection(ns, tasks.aws.ns, name="aws")
 
 # Compose from codebuild
 ns_codebuild = Collection("codebuild")
