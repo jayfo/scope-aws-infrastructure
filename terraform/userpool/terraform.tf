@@ -1,7 +1,13 @@
 resource "aws_cognito_user_pool" "userpool" {
   name = "uwscope"
 
-  alias_attributes = ["email", "phone_number", "preferred_username"]
+  lifecycle {
+    prevent_destroy = true
+  }
+
+  # Require a username,
+  # as allowing "email" or "phone_number" means those must be unique
+  alias_attributes = ["preferred_username"]
 
   admin_create_user_config {
     # Do not allow self signup, this ensures all accounts are consented participants

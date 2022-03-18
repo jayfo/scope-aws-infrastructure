@@ -30,7 +30,13 @@ def codebuild_environment_variables_factory(*, context):
             # "REPOSITORY_TAGS": "freeze-2022-02-25 {}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "freeze-2022-02-27 {}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "freeze-2022-03-01a {}".format(BUILD_TIMESTAMP),
-            "REPOSITORY_TAGS": "freeze-2022-03-04a {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "freeze-2022-03-04a {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "freeze-2022-03-05 {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "freeze-2022-03-06 {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "freeze-2022-03-07 {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "freeze-2022-03-14b {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "freeze-2022-03-17 {}".format(BUILD_TIMESTAMP),
+            "REPOSITORY_TAGS": "freeze-2022-03-18 {}".format(BUILD_TIMESTAMP),
         }
 
 

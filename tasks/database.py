@@ -7,10 +7,17 @@ import scope.tasks.database_reset
 
 INSTANCE_SSH_CONFIG_PATH = "./secrets/configuration/instance_ssh.yaml"
 DOCUMENTDB_CONFIG_PATH = "./secrets/configuration/documentdb.yaml"
+COGNITO_CONFIG_PATH = "./secrets/configuration/cognito.yaml"
 
 DATABASE_DEMO_CONFIG_PATH = "./secrets/configuration/database_demo.yaml"
 POPULATE_DEMO_DIR_PATH = "./secrets/configuration/populate_demo"
-POPULATE_RESET_DEMO_DIR_PATH = "./secrets/configuration/populate_reset_demo"
+POPULATE_DEMO_RESET_DIR_PATH = "./secrets/configuration/populate_demo_reset"
+
+DATABASE_MULTICARE_CONFIG_PATH = "./secrets/configuration/database_multicare.yaml"
+POPULATE_MULTICARE_DIR_PATH = "./secrets/configuration/populate_multicare"
+
+DATABASE_SCCA_CONFIG_PATH = "./secrets/configuration/database_scca.yaml"
+POPULATE_SCCA_DIR_PATH = "./secrets/configuration/populate_scca"
 
 # Build task collection
 ns = Collection("database")
@@ -25,6 +32,7 @@ ns_demo.add_task(scope.tasks.database_populate.task_populate(
     instance_ssh_config_path=INSTANCE_SSH_CONFIG_PATH,
     documentdb_config_path=DOCUMENTDB_CONFIG_PATH,
     database_config_path=DATABASE_DEMO_CONFIG_PATH,
+    cognito_config_path=COGNITO_CONFIG_PATH,
     populate_dir_path=POPULATE_DEMO_DIR_PATH,
 ), "populate")
 ns_demo.add_task(scope.tasks.database_reset.task_reset(
@@ -32,7 +40,37 @@ ns_demo.add_task(scope.tasks.database_reset.task_reset(
     documentdb_config_path=DOCUMENTDB_CONFIG_PATH,
     database_config_path=DATABASE_DEMO_CONFIG_PATH,
     populate_dir_path=POPULATE_DEMO_DIR_PATH,
-    populate_reset_dir_path=POPULATE_RESET_DEMO_DIR_PATH,
+    populate_reset_dir_path=POPULATE_DEMO_RESET_DIR_PATH,
 ), "reset")
 
+ns_multicare = Collection("multicare")
+ns_multicare.add_task(scope.tasks.database_initialize.task_initialize(
+    instance_ssh_config_path=INSTANCE_SSH_CONFIG_PATH,
+    documentdb_config_path=DOCUMENTDB_CONFIG_PATH,
+    database_config_path=DATABASE_MULTICARE_CONFIG_PATH,
+), "initialize")
+ns_multicare.add_task(scope.tasks.database_populate.task_populate(
+    instance_ssh_config_path=INSTANCE_SSH_CONFIG_PATH,
+    documentdb_config_path=DOCUMENTDB_CONFIG_PATH,
+    database_config_path=DATABASE_MULTICARE_CONFIG_PATH,
+    cognito_config_path=COGNITO_CONFIG_PATH,
+    populate_dir_path=POPULATE_MULTICARE_DIR_PATH,
+), "populate")
+
+ns_scca = Collection("scca")
+ns_scca.add_task(scope.tasks.database_initialize.task_initialize(
+    instance_ssh_config_path=INSTANCE_SSH_CONFIG_PATH,
+    documentdb_config_path=DOCUMENTDB_CONFIG_PATH,
+    database_config_path=DATABASE_SCCA_CONFIG_PATH,
+), "initialize")
+ns_scca.add_task(scope.tasks.database_populate.task_populate(
+    instance_ssh_config_path=INSTANCE_SSH_CONFIG_PATH,
+    documentdb_config_path=DOCUMENTDB_CONFIG_PATH,
+    database_config_path=DATABASE_SCCA_CONFIG_PATH,
+    cognito_config_path=COGNITO_CONFIG_PATH,
+    populate_dir_path=POPULATE_SCCA_DIR_PATH,
+), "populate")
+
 compose_collection(ns, ns_demo, name="demo")
+compose_collection(ns, ns_multicare, name="multicare")
+compose_collection(ns, ns_scca, name="scca")
