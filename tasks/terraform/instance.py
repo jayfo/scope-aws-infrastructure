@@ -68,6 +68,7 @@ compose_collection(
     exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
         exclude=[
+            "destroy",  # Prevent destroy
             'init',
             'helm-install',
             'helmfile-apply',
