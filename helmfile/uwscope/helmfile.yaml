@@ -176,6 +176,101 @@ releases:
         serviceWebPatient: 'dev-web-patient'
         serviceWebRegistry: 'dev-web-registry'
 
+  ########################################
+  #
+  # MultiCare deployment
+  #
+  ########################################
+
+  - name: 'multicare-web-patient'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-patient.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_patient_multicare_generated.values.yaml'
+      - imageName: 'uwscope/web_patient'
+        imageTag: 'freeze-2022-03-18b'
+
+  - name: 'multicare-web-registry'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-registry.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_registry_multicare_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'freeze-2022-03-18b'
+
+  - name: 'multicare-server-flask'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-flask-server.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/flask_multicare_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'freeze-2022-03-18b'
+
+  - name: 'multicare-ingress'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-instance-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+    values:
+      - # Name of TLS secret to use
+        tlsSecret: 'tls-uwscope-org'
+        hostFlask: 'multicare.uwscope.org'
+        hostPatient: 'app.multicare.uwscope.org'
+        hostRegistry: 'registry.multicare.uwscope.org'
+        serviceServerFlask: 'multicare-server-flask'
+        serviceWebPatient: 'multicare-web-patient'
+        serviceWebRegistry: 'multicare-web-registry'
+
+  ########################################
+  #
+  # SCCA deployment
+  #
+  ########################################
+
+  - name: 'scca-web-patient'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-patient.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_patient_scca_generated.values.yaml'
+      - imageName: 'uwscope/web_patient'
+        imageTag: 'freeze-2022-03-18b'
+
+  - name: 'scca-web-registry'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-registry.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_registry_scca_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'freeze-2022-03-18b'
+
+  - name: 'scca-server-flask'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-flask-server.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/flask_scca_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'freeze-2022-03-18b'
+
+  - name: 'scca-ingress'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-instance-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+    values:
+      - # Name of TLS secret to use
+        tlsSecret: 'tls-uwscope-org'
+        hostFlask: 'scca.uwscope.org'
+        hostPatient: 'app.scca.uwscope.org'
+        hostRegistry: 'registry.scca.uwscope.org'
+        serviceServerFlask: 'scca-server-flask'
+        serviceWebPatient: 'scca-web-patient'
+        serviceWebRegistry: 'scca-web-registry'
 
 helmDefaults:
   # Prefer explicit management of CRDs via releases
