@@ -14,7 +14,7 @@ export GIT_REPOSITORY='https://github.com/uwscope/scope-web.git'
 # export GIT_REPOSITORY_BRANCH='freeze-2022-03-07'
 # export GIT_REPOSITORY_BRANCH='freeze-2022-03-14b'
 # export GIT_REPOSITORY_BRANCH='freeze-2022-03-17'
-export GIT_REPOSITORY_BRANCH='freeze-2022-03-18'
+export GIT_REPOSITORY_BRANCH='freeze-2022-03-18b'
 
 # Useful configuration for debugging
 # export GIT_REPOSITORY='https://github.com/jayfo/scope-web.git'
