@@ -82,54 +82,6 @@ releases:
 
   ########################################
   #
-  # Demo deployment
-  #
-  ########################################
-
-  - name: 'demo-web-patient'
-    # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-web-patient.tgz'
-    values:
-      - './values/ecr_generated.values.yaml'
-      - './values/web_patient_demo_generated.values.yaml'
-      - imageName: 'uwscope/web_patient'
-        imageTag: 'freeze-2022-03-20'
-
-  - name: 'demo-web-registry'
-    # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-web-registry.tgz'
-    values:
-      - './values/ecr_generated.values.yaml'
-      - './values/web_registry_demo_generated.values.yaml'
-      - imageName: 'uwscope/web_registry'
-        imageTag: 'freeze-2022-03-20'
-
-  - name: 'demo-server-flask'
-    # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-flask-server.tgz'
-    values:
-      - './values/ecr_generated.values.yaml'
-      - './values/flask_demo_generated.values.yaml'
-      - imageName: 'uwscope/server_flask'
-        imageTag: 'freeze-2022-03-20'
-
-  - name: 'demo-ingress'
-    # Installed from a local chart, managed in helmfile_config.yaml
-    chart: './charts/scope-instance-ingress.tgz'
-    needs:
-      - 'ingress-crd'
-    values:
-      - # Name of TLS secret to use
-        tlsSecret: 'tls-uwscope-org'
-        hostFlask: 'demo.uwscope.org'
-        hostPatient: 'app.demo.uwscope.org'
-        hostRegistry: 'registry.demo.uwscope.org'
-        serviceServerFlask: 'demo-server-flask'
-        serviceWebPatient: 'demo-web-patient'
-        serviceWebRegistry: 'demo-web-registry'
-
-  ########################################
-  #
   # Dev deployment
   #
   ########################################
@@ -141,7 +93,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_patient_dev_generated.values.yaml'
       - imageName: 'uwscope/web_patient'
-        imageTag: 'freeze-2022-03-20'
+        imageTag: 'freeze-2022-03-21'
 
   - name: 'dev-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -150,7 +102,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_dev_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'freeze-2022-03-20'
+        imageTag: 'freeze-2022-03-21'
 
   - name: 'dev-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -159,7 +111,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/flask_dev_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'freeze-2022-03-20'
+        imageTag: 'freeze-2022-03-21'
 
   - name: 'dev-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -175,6 +127,54 @@ releases:
         serviceServerFlask: 'dev-server-flask'
         serviceWebPatient: 'dev-web-patient'
         serviceWebRegistry: 'dev-web-registry'
+
+  ########################################
+  #
+  # Demo deployment
+  #
+  ########################################
+
+  - name: 'demo-web-patient'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-patient.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_patient_demo_generated.values.yaml'
+      - imageName: 'uwscope/web_patient'
+        imageTag: 'freeze-2022-03-21'
+
+  - name: 'demo-web-registry'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-registry.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_registry_demo_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'freeze-2022-03-21'
+
+  - name: 'demo-server-flask'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-flask-server.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/flask_demo_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'freeze-2022-03-21'
+
+  - name: 'demo-ingress'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-instance-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+    values:
+      - # Name of TLS secret to use
+        tlsSecret: 'tls-uwscope-org'
+        hostFlask: 'demo.uwscope.org'
+        hostPatient: 'app.demo.uwscope.org'
+        hostRegistry: 'registry.demo.uwscope.org'
+        serviceServerFlask: 'demo-server-flask'
+        serviceWebPatient: 'demo-web-patient'
+        serviceWebRegistry: 'demo-web-registry'
 
   ########################################
   #
