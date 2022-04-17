@@ -40,7 +40,8 @@ def codebuild_environment_variables_factory(*, context):
             # "REPOSITORY_TAGS": "freeze-2022-03-18b {}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "freeze-2022-03-19 {}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "freeze-2022-03-20 {}".format(BUILD_TIMESTAMP),
-            "REPOSITORY_TAGS": "freeze-2022-03-21a {}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "freeze-2022-03-21a {}".format(BUILD_TIMESTAMP),
+            "REPOSITORY_TAGS": "v0.2.0 v0.2.0-{}".format(BUILD_TIMESTAMP),
         }
 
 
