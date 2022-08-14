@@ -36,7 +36,7 @@ ns_dev.add_task(scope.tasks.database_populate.task_populate(
     documentdb_config_path=DOCUMENTDB_CONFIG_PATH,
     database_config_path=DATABASE_DEV_CONFIG_PATH,
     cognito_config_path=COGNITO_CONFIG_PATH,
-    populate_dir_path=POPULATE_DEMO_DIR_PATH,
+    populate_dir_path=POPULATE_DEV_DIR_PATH,
 ), "populate")
 ns_dev.add_task(scope.tasks.database_reset.task_reset(
     instance_ssh_config_path=INSTANCE_SSH_CONFIG_PATH,
