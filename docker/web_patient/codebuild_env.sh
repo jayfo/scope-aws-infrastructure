@@ -21,7 +21,8 @@ export GIT_REPOSITORY='https://github.com/uwscope/scope-web.git'
 # export GIT_REPOSITORY_BRANCH='release/v0.2.0'
 # export GIT_REPOSITORY_BRANCH='release/v0.3.0'
 # export GIT_REPOSITORY_BRANCH='release/v0.4.0'
-export GIT_REPOSITORY_BRANCH='release/v0.5.0'
+# export GIT_REPOSITORY_BRANCH='release/v0.5.0'
+export GIT_REPOSITORY_BRANCH='release/v0.6.0'
 
 # Useful configuration for debugging
 # export GIT_REPOSITORY='https://github.com/jayfo/scope-web.git'
