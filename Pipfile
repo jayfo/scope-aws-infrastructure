@@ -20,6 +20,7 @@ editable = true
 [packages.scope]
 git = "https://github.com/uwscope/scope-web.git"
 subdirectory = "scope_shared"
+ref = "release/v0.7.0"
 editable = true
 
 ################################################################################

@@ -536,7 +536,7 @@
         "scope": {
             "editable": true,
             "git": "https://github.com/uwscope/scope-web.git",
-            "ref": "19273e3feb68679e5ffdec87034e529407770bd0",
+            "ref": "489a638c5fed392059a6ae1f5570c9eeebf2802a",
             "subdirectory": "scope_shared"
         },
         "semver": {
