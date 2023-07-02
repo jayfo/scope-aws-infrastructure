@@ -93,7 +93,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_patient_dev_generated.values.yaml'
       - imageName: 'uwscope/web_patient'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'dev-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -102,7 +102,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_dev_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'dev-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -111,7 +111,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/flask_dev_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'dev-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -141,7 +141,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_patient_demo_generated.values.yaml'
       - imageName: 'uwscope/web_patient'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'demo-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -150,7 +150,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_demo_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'demo-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -159,7 +159,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/flask_demo_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'demo-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -189,7 +189,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_patient_multicare_generated.values.yaml'
       - imageName: 'uwscope/web_patient'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'multicare-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -198,7 +198,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_multicare_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'multicare-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -207,7 +207,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/flask_multicare_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'multicare-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -237,7 +237,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_patient_scca_generated.values.yaml'
       - imageName: 'uwscope/web_patient'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'scca-web-registry'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -246,7 +246,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/web_registry_scca_generated.values.yaml'
       - imageName: 'uwscope/web_registry'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'scca-server-flask'
     # Installed from a local chart, managed in helmfile_config.yaml
@@ -255,7 +255,7 @@ releases:
       - './values/ecr_generated.values.yaml'
       - './values/flask_scca_generated.values.yaml'
       - imageName: 'uwscope/server_flask'
-        imageTag: 'v0.7.0'
+        imageTag: 'v0.8.0'
 
   - name: 'scca-ingress'
     # Installed from a local chart, managed in helmfile_config.yaml
