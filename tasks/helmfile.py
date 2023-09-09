@@ -18,6 +18,7 @@ SSH_CONFIG_PATH = Path(INSTANCE_TERRAFORM_DIR, INSTANCE_NAME, "ssh_config.yaml")
 
 FLASK_DEMO_CONFIG_PATH = "./secrets/configuration/flask_demo.yaml"
 FLASK_DEV_CONFIG_PATH = "./secrets/configuration/flask_dev.yaml"
+FLASK_FREDHUTCH_CONFIG_PATH = "./secrets/configuration/flask_fredhutch.yaml"
 FLASK_MULTICARE_CONFIG_PATH = "./secrets/configuration/flask_multicare.yaml"
 FLASK_SCCA_CONFIG_PATH = "./secrets/configuration/flask_scca.yaml"
 
@@ -88,6 +89,37 @@ def web_registry_dev_values_factory(*, context):
     return {
         "webRegistryConfig": {
             "flaskBaseUrl": "https://registry.dev.uwscope.org/api/",
+        }
+    }
+
+
+#
+# Fred Hutch configuration
+#
+
+# Information for configuring server_flask
+def flask_fredhutch_values_factory(*, context):
+    flask_fredhutch_config = scope.config.FlaskConfig.load(FLASK_FREDHUTCH_CONFIG_PATH)
+
+    return {
+        "flaskConfig": flask_fredhutch_config.encode(),
+    }
+
+
+# Information for configuring web_patient
+def web_patient_fredhutch_values_factory(*, context):
+    return {
+        "webPatientConfig": {
+            "flaskBaseUrl": "https://app.fredhutch.uwscope.org/api/",
+        }
+    }
+
+
+# Information for configuring web_registry
+def web_registry_fredhutch_values_factory(*, context):
+    return {
+        "webRegistryConfig": {
+            "flaskBaseUrl": "https://registry.fredhutch.uwscope.org/api/",
         }
     }
 
@@ -172,6 +204,10 @@ task_helmfile_apply = (
             "flask_demo_generated": flask_demo_values_factory,
             "web_patient_demo_generated": web_patient_demo_values_factory,
             "web_registry_demo_generated": web_registry_demo_values_factory,
+            # Fred Hutch Values
+            "flask_fredhutch_generated": flask_fredhutch_values_factory,
+            "web_patient_fredhutch_generated": web_patient_fredhutch_values_factory,
+            "web_registry_fredhutch_generated": web_registry_fredhutch_values_factory,
             # MultiCare Values
             "flask_multicare_generated": flask_multicare_values_factory,
             "web_patient_multicare_generated": web_patient_multicare_values_factory,
