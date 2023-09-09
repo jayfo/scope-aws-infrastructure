@@ -62,7 +62,6 @@ releases:
         dnsNames:
           # First name will also be used as common name
           - 'uwscope.org'
-          - 'www.uwscope.org'
           # Demo domains
           - 'demo.uwscope.org'
           - 'app.demo.uwscope.org'
