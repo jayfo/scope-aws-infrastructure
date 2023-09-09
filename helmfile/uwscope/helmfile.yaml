@@ -70,6 +70,10 @@ releases:
           - 'dev.uwscope.org'
           - 'app.dev.uwscope.org'
           - 'registry.dev.uwscope.org'
+          # Fred Hutch domains
+          - 'fredhutch.uwscope.org'
+          - 'app.fredhutch.uwscope.org'
+          - 'registry.fredhutch.uwscope.org'
           # Multicare domains
           - 'multicare.uwscope.org'
           - 'app.multicare.uwscope.org'
