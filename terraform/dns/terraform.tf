@@ -45,6 +45,20 @@ module "hosted_zone" {
       ip = var.eip_public_ip,
     },
 
+    /* FredHutch Deployment */
+    {
+      name = "fredhutch.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "app.fredhutch.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "registry.fredhutch.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+
     /* Multicare Deployment */
     {
       name = "multicare.uwscope.org",
