@@ -12,10 +12,6 @@ module "hosted_zone" {
       name = "uwscope.org",
       ip = var.eip_public_ip,
     },
-    {
-      name = "www.uwscope.org",
-      ip = var.eip_public_ip,
-    },
 
     /* Demo Deployment */
     {
