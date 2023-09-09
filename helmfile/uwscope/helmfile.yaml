@@ -62,7 +62,6 @@ releases:
         dnsNames:
           # First name will also be used as common name
           - 'uwscope.org'
-          - 'www.uwscope.org'
           # Demo domains
           - 'demo.uwscope.org'
           - 'app.demo.uwscope.org'
@@ -71,7 +70,11 @@ releases:
           - 'dev.uwscope.org'
           - 'app.dev.uwscope.org'
           - 'registry.dev.uwscope.org'
-          # Multicare domains
+          # Fred Hutch domains
+          - 'fredhutch.uwscope.org'
+          - 'app.fredhutch.uwscope.org'
+          - 'registry.fredhutch.uwscope.org'
+          # MultiCare domains
           - 'multicare.uwscope.org'
           - 'app.multicare.uwscope.org'
           - 'registry.multicare.uwscope.org'
@@ -175,6 +178,54 @@ releases:
         serviceServerFlask: 'demo-server-flask'
         serviceWebPatient: 'demo-web-patient'
         serviceWebRegistry: 'demo-web-registry'
+
+  ########################################
+  #
+  # Fred Hutch deployment
+  #
+  ########################################
+
+  - name: 'fredhutch-web-patient'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-patient.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_patient_fredhutch_generated.values.yaml'
+      - imageName: 'uwscope/web_patient'
+        imageTag: 'v0.8.0'
+
+  - name: 'fredhutch-web-registry'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-web-registry.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/web_registry_fredhutch_generated.values.yaml'
+      - imageName: 'uwscope/web_registry'
+        imageTag: 'v0.8.0'
+
+  - name: 'fredhutch-server-flask'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-flask-server.tgz'
+    values:
+      - './values/ecr_generated.values.yaml'
+      - './values/flask_fredhutch_generated.values.yaml'
+      - imageName: 'uwscope/server_flask'
+        imageTag: 'v0.8.0'
+
+  - name: 'fredhutch-ingress'
+    # Installed from a local chart, managed in helmfile_config.yaml
+    chart: './charts/scope-instance-ingress.tgz'
+    needs:
+      - 'ingress-crd'
+    values:
+      - # Name of TLS secret to use
+        tlsSecret: 'tls-uwscope-org'
+        hostFlask: 'fredhutch.uwscope.org'
+        hostPatient: 'app.fredhutch.uwscope.org'
+        hostRegistry: 'registry.fredhutch.uwscope.org'
+        serviceServerFlask: 'fredhutch-server-flask'
+        serviceWebPatient: 'fredhutch-web-patient'
+        serviceWebRegistry: 'fredhutch-web-registry'
 
   ########################################
   #

@@ -12,10 +12,6 @@ module "hosted_zone" {
       name = "uwscope.org",
       ip = var.eip_public_ip,
     },
-    {
-      name = "www.uwscope.org",
-      ip = var.eip_public_ip,
-    },
 
     /* Demo Deployment */
     {
@@ -45,7 +41,21 @@ module "hosted_zone" {
       ip = var.eip_public_ip,
     },
 
-    /* Multicare Deployment */
+    /* FredHutch Deployment */
+    {
+      name = "fredhutch.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "app.fredhutch.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+    {
+      name = "registry.fredhutch.uwscope.org",
+      ip = var.eip_public_ip,
+    },
+
+    /* MultiCare Deployment */
     {
       name = "multicare.uwscope.org",
       ip = var.eip_public_ip,
