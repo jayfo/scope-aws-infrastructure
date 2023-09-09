@@ -74,7 +74,7 @@ releases:
           - 'fredhutch.uwscope.org'
           - 'app.fredhutch.uwscope.org'
           - 'registry.fredhutch.uwscope.org'
-          # Multicare domains
+          # MultiCare domains
           - 'multicare.uwscope.org'
           - 'app.multicare.uwscope.org'
           - 'registry.multicare.uwscope.org'

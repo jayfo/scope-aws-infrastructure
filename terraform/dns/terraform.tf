@@ -55,7 +55,7 @@ module "hosted_zone" {
       ip = var.eip_public_ip,
     },
 
-    /* Multicare Deployment */
+    /* MultiCare Deployment */
     {
       name = "multicare.uwscope.org",
       ip = var.eip_public_ip,
