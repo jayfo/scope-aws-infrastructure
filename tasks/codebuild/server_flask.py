@@ -22,9 +22,9 @@ def codebuild_environment_variables_factory(*, context):
             "REGISTRY_URL": ecr.output.registry_url,
             "REPOSITORY": "uwscope/server_flask",
             "REPOSITORY_URL": ecr.output.repository_urls["uwscope/server_flask"],
-            # "REPOSITORY_TAGS": "v0.7.0-beta10 v0.7.0-beta10-{}".format(BUILD_TIMESTAMP),
-            # "REPOSITORY_TAGS": "v0.8.0 v0.8.0-{}".format(BUILD_TIMESTAMP),
-            "REPOSITORY_TAGS": "v0.9.0 v0.9.0-{}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "v0.7.0-beta01 v0.7.0-beta01-{}".format(BUILD_TIMESTAMP),
+            # "REPOSITORY_TAGS": "v0.9.0 v0.9.0-{}".format(BUILD_TIMESTAMP),
+            "REPOSITORY_TAGS": "v0.10.0 v0.10.0-{}".format(BUILD_TIMESTAMP),
         }
 
 
