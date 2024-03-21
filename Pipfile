@@ -26,6 +26,7 @@ numpy = "1.23.*"
 pyjwt = "2.4.*"
 pymongo = "4.2.*"
 pytest = "7.1.*"
+python-dateutil = "2.8.*"
 requests = "2.31.*"
 
 # These are < 1.0, pin a specific version.
@@ -62,7 +63,7 @@ python-dotenv = "0.20.0"
 [packages.scope]
 git = "https://github.com/uwscope/scope-web.git"
 subdirectory = "scope_shared"
-ref = "release/v0.10.0"
+ref = "release/v0.13.0"
 editable = true
 
 ################################################################################
