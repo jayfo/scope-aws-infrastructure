@@ -783,7 +783,7 @@
         "scope": {
             "editable": true,
             "git": "https://github.com/uwscope/scope-web.git",
-            "ref": "d76be4ed7a93d791ae5d6151609130570adcafdf",
+            "ref": "5b69745645d3753e3ea05a266408dab26dcee652",
             "subdirectory": "scope_shared"
         },
         "semver": {
@@ -815,7 +815,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_full_version < '3.11.0a7'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.0.1"
         },
         "typing-extensions": {
