@@ -3,8 +3,9 @@ import aws_infrastructure.tasks.library.terraform
 from collections import namedtuple
 from invoke import Collection
 
+from tasks.constants import TERRAFORM_BIN
+
 CONFIG_KEY = 'userpool'
-TERRAFORM_BIN = './bin/terraform.exe'
 TERRAFORM_DIR = './terraform/userpool'
 
 ns = Collection('userpool')
@@ -14,6 +15,7 @@ ns_userpool = aws_infrastructure.tasks.library.terraform.create_tasks(
     config_key=CONFIG_KEY,
     terraform_bin=TERRAFORM_BIN,
     terraform_dir=TERRAFORM_DIR,
+    auto_approve=False,
     output_tuple_factory=namedtuple(
         'userpool',
         [

@@ -7,7 +7,7 @@ import aws_infrastructure.tasks.library.helm
 from invoke import Collection
 
 CONFIG_KEY = 'helm'
-HELM_BIN = './bin/helm.exe'
+HELM_BIN = './.bin/helm.exe'
 HELM_CHARTS_DIRS = [
     './helm',
 ]
