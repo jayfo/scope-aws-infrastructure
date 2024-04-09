@@ -2,13 +2,26 @@ from aws_infrastructure.tasks import compose_collection
 import aws_infrastructure.tasks.library.terraform
 from collections import namedtuple
 from invoke import Collection
+from pathlib import Path
 
 from tasks.constants import TERRAFORM_BIN
+import tasks.terraform.ses
 
 CONFIG_KEY = 'userpool'
 TERRAFORM_DIR = './terraform/userpool'
+TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, "variables.generated.tfvars")
 
 ns = Collection('userpool')
+
+
+# Define variables to provide to Terraform
+def terraform_variables_factory(*, context):
+    with tasks.terraform.ses.ses_read_only(context=context) as ses_read_only:
+        ses_domain_identity_arn = ses_read_only.output.domain_identity_arn
+
+    return {
+        'ses_domain_identity_arn': ses_domain_identity_arn,
+    }
 
 
 ns_userpool = aws_infrastructure.tasks.library.terraform.create_tasks(
@@ -16,6 +29,8 @@ ns_userpool = aws_infrastructure.tasks.library.terraform.create_tasks(
     terraform_bin=TERRAFORM_BIN,
     terraform_dir=TERRAFORM_DIR,
     auto_approve=False,
+    terraform_variables_factory=terraform_variables_factory,
+    terraform_variables_path=TERRAFORM_VARIABLES_PATH,
     output_tuple_factory=namedtuple(
         'userpool',
         [

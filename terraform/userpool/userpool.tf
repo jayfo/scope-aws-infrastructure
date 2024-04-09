@@ -11,8 +11,8 @@ resource "aws_cognito_user_pool" "userpool" {
   # as allowing "email" or "phone_number" means those must be unique
   alias_attributes = ["preferred_username"]
 
+  # Do not allow self signup, this ensures all accounts are consented participants
   admin_create_user_config {
-    # Do not allow self signup, this ensures all accounts are consented participants
     allow_admin_create_user_only = true
   }
 
@@ -26,6 +26,22 @@ resource "aws_cognito_user_pool" "userpool" {
     require_numbers = true
     require_symbols = true
     require_uppercase = true
+  }
+
+  # Prioritize password resets via email,
+  # also specifying this disables legacy SMS / MFA issues.
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
+  }
+
+  email_configuration {
+    email_sending_account  = "DEVELOPER"
+    from_email_address     = "UW Scope Password Reset <noreply@uwscope.org>"
+    reply_to_email_address = "noreply@uwscope.org"
+    source_arn             = var.ses_domain_identity_arn
   }
 }
 

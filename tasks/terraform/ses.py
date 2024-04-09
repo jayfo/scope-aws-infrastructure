@@ -24,18 +24,24 @@ def terraform_variables_factory(*, context):
     }
 
 
-ns_userpool = aws_infrastructure.tasks.library.terraform.create_tasks(
+ns_ses = aws_infrastructure.tasks.library.terraform.create_tasks(
     config_key=CONFIG_KEY,
     terraform_bin=TERRAFORM_BIN,
     terraform_dir=TERRAFORM_DIR,
     auto_approve=False,
     terraform_variables_factory=terraform_variables_factory,
     terraform_variables_path=TERRAFORM_VARIABLES_PATH,
+    output_tuple_factory=namedtuple(
+        'ses',
+        [
+            'domain_identity_arn',
+        ]
+    )
 )
 
 compose_collection(
     ns,
-    ns_userpool,
+    ns_ses,
     sub=False,
     exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
@@ -48,4 +54,9 @@ compose_collection(
             'destroy',
         ]
     )
+)
+
+ses_read_only = aws_infrastructure.tasks.library.terraform.create_context_manager_read_only(
+    init=ns_ses.tasks['init'],
+    output=ns_ses.tasks['output'],
 )
