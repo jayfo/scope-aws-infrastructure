@@ -1,3 +1,9 @@
+resource "aws_ses_configuration_set" "account_recovery" {
+  name = "account-recovery"
+
+  reputation_metrics_enabled = true
+}
+
 resource "aws_cognito_user_pool" "userpool" {
   name = "uwscope"
 
@@ -38,9 +44,10 @@ resource "aws_cognito_user_pool" "userpool" {
   }
 
   email_configuration {
+    configuration_set      = aws_ses_configuration_set.account_recovery.id
     email_sending_account  = "DEVELOPER"
-    from_email_address     = "UW Scope Password Reset <noreply@uwscope.org>"
-    reply_to_email_address = "noreply@uwscope.org"
+    from_email_address     = "UW Scope Password Reset <do-not-reply@uwscope.org>"
+    reply_to_email_address = "do-not-reply@uwscope.org"
     source_arn             = var.ses_domain_identity_arn
   }
 }
