@@ -46,9 +46,13 @@ resource "aws_cognito_user_pool" "userpool" {
   email_configuration {
     configuration_set      = aws_ses_configuration_set.account_recovery.id
     email_sending_account  = "DEVELOPER"
-    from_email_address     = "UW Scope Password Reset <do-not-reply@uwscope.org>"
+    from_email_address     = "SCOPE Password Reset <do-not-reply@uwscope.org>"
     reply_to_email_address = "do-not-reply@uwscope.org"
     source_arn             = var.ses_domain_identity_arn
+  }
+
+  lambda_config {
+    custom_message = aws_lambda_function.userpool_custom_message.arn
   }
 }
 
