@@ -1,12 +1,13 @@
 from aws_infrastructure.tasks import compose_collection
 import aws_infrastructure.tasks.library.terraform
+from collections import namedtuple
 from invoke import Collection
 from pathlib import Path
 
+from tasks.constants import TERRAFORM_BIN
 import tasks.terraform.eip
 
 CONFIG_KEY = "dns"
-TERRAFORM_BIN = "./bin/terraform.exe"
 TERRAFORM_DIR = "./terraform/dns"
 TERRAFORM_VARIABLES_PATH = Path(TERRAFORM_DIR, "variables.generated.tfvars")
 
@@ -25,8 +26,15 @@ ns_dns = aws_infrastructure.tasks.library.terraform.create_tasks(
     config_key=CONFIG_KEY,
     terraform_bin=TERRAFORM_BIN,
     terraform_dir=TERRAFORM_DIR,
+    auto_approve=False,
     terraform_variables_factory=terraform_variables_factory,
     terraform_variables_path=TERRAFORM_VARIABLES_PATH,
+    output_tuple_factory=namedtuple(
+        'dns',
+        [
+            'hosted_zone_id',
+        ]
+    )
 )
 
 compose_collection(
@@ -45,4 +53,9 @@ compose_collection(
             # "destroy",
         ],
     ),
+)
+
+dns_read_only = aws_infrastructure.tasks.library.terraform.create_context_manager_read_only(
+    init=ns_dns.tasks['init'],
+    output=ns_dns.tasks['output'],
 )

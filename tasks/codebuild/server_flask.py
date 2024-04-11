@@ -4,10 +4,10 @@ import aws_infrastructure.tasks.library.terraform
 from datetime import datetime
 from invoke import Collection
 
+from tasks.constants import TERRAFORM_BIN
 import tasks.terraform.ecr
 
 CONFIG_KEY = "codebuild/server_flask"
-TERRAFORM_BIN = "./bin/terraform.exe"
 TERRAFORM_DIR = "./terraform/codebuild/server_flask"
 STAGING_LOCAL_DIR = "./.staging/codebuild/server_flask"
 SOURCE_DIR = "./docker/server_flask"

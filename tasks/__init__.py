@@ -17,6 +17,7 @@ import tasks.terraform.ecr
 import tasks.terraform.eip
 import tasks.terraform.instance
 import tasks.terraform.instance_temporary
+import tasks.terraform.ses
 import tasks.terraform.userpool
 import tasks.terraform.vpc
 import tasks.test
@@ -64,6 +65,7 @@ compose_collection(ns_terraform, tasks.terraform.ecr.ns, name="ecr")
 compose_collection(ns_terraform, tasks.terraform.eip.ns, name="eip")
 compose_collection(ns_terraform, tasks.terraform.instance.ns, name="instance")
 # compose_collection(ns_terraform, tasks.terraform.instance_temporary.ns, name="instance_temporary")
+compose_collection(ns_terraform, tasks.terraform.ses.ns, name="ses")
 compose_collection(ns_terraform, tasks.terraform.userpool.ns, name="userpool")
 compose_collection(ns_terraform, tasks.terraform.vpc.ns, name="vpc")
 

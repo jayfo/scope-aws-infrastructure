@@ -3,8 +3,9 @@ import aws_infrastructure.tasks.library.eip
 import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 
+from tasks.constants import TERRAFORM_BIN
+
 CONFIG_KEY = 'eip'
-TERRAFORM_BIN = './bin/terraform.exe'
 TERRAFORM_DIR = './terraform/eip'
 
 ns = Collection('eip')

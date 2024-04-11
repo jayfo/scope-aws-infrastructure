@@ -1,0 +1,5 @@
+# Generated Terraform Variables
+variables.generated.tfvars
+
+# Generated Lambda Archive
+lambda.zip

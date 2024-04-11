@@ -4,10 +4,10 @@ import aws_infrastructure.tasks.library.terraform
 from datetime import datetime
 from invoke import Collection
 
+from tasks.constants import TERRAFORM_BIN
 import tasks.terraform.ecr
 
 CONFIG_KEY = "codebuild/web_patient"
-TERRAFORM_BIN = "./bin/terraform.exe"
 TERRAFORM_DIR = "./terraform/codebuild/web_patient"
 STAGING_LOCAL_DIR = "./.staging/codebuild/web_patient"
 SOURCE_DIR = "./docker/web_patient"

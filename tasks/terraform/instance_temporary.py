@@ -5,13 +5,13 @@ import aws_infrastructure.tasks.library.terraform
 from invoke import Collection
 from pathlib import Path
 
+from tasks.constants import TERRAFORM_BIN
 import tasks.terraform.documentdb
 import tasks.terraform.ecr
 import tasks.terraform.eip
 import tasks.terraform.vpc
 
 CONFIG_KEY = 'instance_temporary'
-TERRAFORM_BIN = './bin/terraform.exe'
 TERRAFORM_DIR = './terraform/instance_temporary'
 HELM_REPO_DIR = './helm_repo'
 STAGING_LOCAL_HELMFILE_DIR = './.staging/helmfile'
