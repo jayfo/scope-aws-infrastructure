@@ -24,7 +24,7 @@ def codebuild_environment_variables_factory(*, context):
             "REPOSITORY_URL": ecr.output.repository_urls["uwscope/web_registry"],
             # "REPOSITORY_TAGS": "v0.13.0-beta01 v0.13.0-beta01-{}".format(BUILD_TIMESTAMP),
             # "REPOSITORY_TAGS": "v0.12.0 v0.12.0-{}".format(BUILD_TIMESTAMP),
-            "REPOSITORY_TAGS": "v0.14.0 v0.14.0-{}".format(BUILD_TIMESTAMP),
+            "REPOSITORY_TAGS": "v0.14.1 v0.14.1-{}".format(BUILD_TIMESTAMP),
         }
 
 
