@@ -46,9 +46,6 @@ pytz = "2024.1"
 
 invoke = "1.7.*"
 paramiko = "3.4.*"
-# TODO: Pin cryptography until paramiko resolves the 3DES deprecation in 37.0
-#       https://github.com/paramiko/paramiko/issues/2419
-cryptography = "36.*"
 pipenv = "2023.12.*"
 
 # These are < 1.0, pin a specific version.
@@ -66,7 +63,7 @@ python-dotenv = "0.20.0"
 [packages.scope]
 git = "https://github.com/uwscope/scope-web.git"
 subdirectory = "scope_shared"
-ref = "release/v0.17.0"
+ref = "release/v0.18.0"
 editable = true
 
 ################################################################################
