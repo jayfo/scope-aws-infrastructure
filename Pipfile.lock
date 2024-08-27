@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4cf9c2606028ebe01bdbbf2ef3c1bfdb0488b6ab61587d3a04c38bfb24dd1b97"
+            "sha256": "d15b47e9f49911dedc064f11586a66ae49f2c447a5e7e45afaa848fd8c01792f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -363,11 +363,11 @@
         },
         "idna": {
             "hashes": [
-                "sha256:028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc",
-                "sha256:82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0"
+                "sha256:050b4e5baadcd44d760cedbd2b8e639f2ff89bbc7a5730fcc662954303377aac",
+                "sha256:d838c2c0ed6fced7693d5e8ab8e734d5f8fda53a039c0164afb0b82e771e3603"
             ],
-            "markers": "python_version >= '3.5'",
-            "version": "==3.7"
+            "markers": "python_version >= '3.6'",
+            "version": "==3.8"
         },
         "iniconfig": {
             "hashes": [
@@ -793,7 +793,7 @@
         "scope": {
             "editable": true,
             "git": "https://github.com/uwscope/scope-web.git",
-            "ref": "bae054669e43a0e8a1a1faa8f1ecc7e8b12dac5e",
+            "ref": "d24b021bd037d09eea6b0552e72ad957bc9ba904",
             "subdirectory": "scope_shared"
         },
         "semver": {
