@@ -63,7 +63,7 @@ python-dotenv = "0.20.0"
 [packages.scope]
 git = "https://github.com/uwscope/scope-web.git"
 subdirectory = "scope_shared"
-ref = "release/v0.19.0"
+ref = "release/v0.20.0"
 editable = true
 
 ################################################################################
