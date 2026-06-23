@@ -8,10 +8,10 @@ resource "aws_cognito_user_pool" "userpool" {
   name = "uwscope"
 
   # Protect against deletion
-  lifecycle {
-    prevent_destroy = true
-  }
-  deletion_protection = "ACTIVE"
+  # lifecycle {
+  #  prevent_destroy = true
+  # }
+  deletion_protection = "INACTIVE"
 
   # Require a username,
   # as allowing "email" or "phone_number" means those must be unique

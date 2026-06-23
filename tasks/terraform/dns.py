@@ -44,13 +44,12 @@ compose_collection(
     exclude=aws_infrastructure.tasks.library.terraform.exclude_without_state(
         terraform_dir=TERRAFORM_DIR,
         exclude=[
-            "destroy",  # Prevent destroy
+            # "destroy",  # Prevent destroy
             "init",
             "output",
         ],
         exclude_without_state=[
-            # Prevent destroy
-            # "destroy",
+            "destroy",
         ],
     ),
 )

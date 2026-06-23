@@ -15,6 +15,7 @@ module "documentdb" {
   name = "scope-documentdb"
 
   apply_immediately = true
+  deletion_protection = false
 
   admin_user = "scope_admin"
   admin_password = random_password.admin_password.result
